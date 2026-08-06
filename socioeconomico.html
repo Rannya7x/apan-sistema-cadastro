@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Formulário Socioeconômico</title>
+<link rel="stylesheet" href="socioeconomico.css">
+</head>
+<body>
+
+<div class="container">
+  <h1>Formulário Socioeconômico</h1>
+  <p class="subtitle">Preencha os dados abaixo. Campos marcados com * são obrigatórios.</p>
+
+  <form id="socio-form" action="#" method="post">
+
+    <fieldset>
+      <legend>Documentação</legend>
+
+      <div class="field">
+        <label for="cpf">CPF <span class="req">*</span></label>
+        <input type="text" id="cpf" name="cpf" placeholder="000.000.000-00"
+               pattern="\d{3}\.\d{3}\.\d{3}-\d{2}|\d{11}" maxlength="14" required>
+        <small class="hint">Formato: 000.000.000-00 (ou apenas 11 números).</small>
+      </div>
+
+      <div class="field">
+        <label for="rg">RG</label>
+        <input type="text" id="rg" name="rg" inputmode="numeric" pattern="\d*" placeholder="Apenas números">
+      </div>
+
+      <div class="field">
+        <label for="orgaoExpedidor">Órgão Expedidor</label>
+        <input type="text" id="orgaoExpedidor" name="orgaoExpedidor" placeholder="Ex: SSP, IFP">
+      </div>
+
+      <div class="field">
+        <label for="ufRg">UF do RG</label>
+        <select id="ufRg" name="ufRg">
+          <option value="">Selecione</option>
+          <option value="AC">AC</option>
+          <option value="AL">AL</option>
+          <option value="AM">AM</option>
+          <option value="AP">AP</option>
+          <option value="BA">BA</option>
+          <option value="CE">CE</option>
+          <option value="DF">DF</option>
+          <option value="ES">ES</option>
+          <option value="GO">GO</option>
+          <option value="MA">MA</option>
+          <option value="MG">MG</option>
+          <option value="MS">MS</option>
+          <option value="MT">MT</option>
+          <option value="PA">PA</option>
+          <option value="PB">PB</option>
+          <option value="PE">PE</option>
+          <option value="PI">PI</option>
+          <option value="PR">PR</option>
+          <option value="RJ">RJ</option>
+          <option value="RN">RN</option>
+          <option value="RO">RO</option>
+          <option value="RR">RR</option>
+          <option value="RS">RS</option>
+          <option value="SC">SC</option>
+          <option value="SE">SE</option>
+          <option value="SP">SP</option>
+          <option value="TO">TO</option>
+        </select>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Dados Pessoais</legend>
+
+      <div class="field">
+        <label for="genero">Gênero <span class="req">*</span></label>
+        <select id="genero" name="genero" required>
+          <option value="">Selecione</option>
+          <option value="Feminino">Feminino</option>
+          <option value="Masculino">Masculino</option>
+          <option value="Outro">Outro</option>
+          <option value="Prefiro não declarar">Prefiro não declarar</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="etnia">Cor/etnia</label>
+        <select id="etnia" name="etnia">
+          <option value="">Selecione</option>
+          <option value="Parda">Parda</option>
+          <option value="Branca">Branca</option>
+          <option value="Preta">Preta</option>
+          <option value="Indígena">Indígena</option>
+          <option value="Amarela">Amarela</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="estadoCivil">Estado Civil</label>
+        <select id="estadoCivil" name="estadoCivil">
+          <option value="">Selecione</option>
+          <option value="Solteiro(a)">Solteiro(a)</option>
+          <option value="Casado(a)">Casado(a)</option>
+          <option value="Divorciado(a)">Divorciado(a)</option>
+          <option value="Viúvo(a)">Viúvo(a)</option>
+          <option value="União Estável">União Estável</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="nomeMae">Nome da Mãe <span class="req">*</span></label>
+        <input type="text" id="nomeMae" name="nomeMae" placeholder="Nome completo" required>
+      </div>
+
+      <div class="field">
+        <label for="nomePai">Nome do Pai</label>
+        <input type="text" id="nomePai" name="nomePai" placeholder="Nome completo">
+      </div>
+
+      <div class="field">
+        <label for="contatoEmergencia">Contato de Emergência <span class="req">*</span></label>
+        <input type="tel" id="contatoEmergencia" name="contatoEmergencia"
+               placeholder="(92) 91234-5678" pattern="\(\d{2}\)\s?\d{4,5}-\d{4}" required>
+        <small class="hint">Formato: (92) 91234-5678</small>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Educação e Trabalho</legend>
+
+      <div class="field">
+        <label for="escolaridade">Escolaridade <span class="req">*</span></label>
+        <select id="escolaridade" name="escolaridade" required>
+          <option value="">Selecione</option>
+          <option value="Fundamental Incompleto">Fundamental Incompleto</option>
+          <option value="Fundamental Completo">Fundamental Completo</option>
+          <option value="Médio Incompleto">Médio Incompleto</option>
+          <option value="Médio Completo">Médio Completo</option>
+          <option value="Superior Incompleto">Superior Incompleto</option>
+          <option value="Superior Completo">Superior Completo</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="profissaoAtual">Profissão Atual</label>
+        <input type="text" id="profissaoAtual" name="profissaoAtual" placeholder="Ex: Estudante, Vendedor">
+      </div>
+
+      <div class="field">
+        <label for="tipoVinculoEmprego">Tipo de Vínculo de Emprego</label>
+        <select id="tipoVinculoEmprego" name="tipoVinculoEmprego">
+          <option value="">Selecione</option>
+          <option value="CLT">CLT</option>
+          <option value="Estagiário">Estagiário</option>
+          <option value="Autônomo">Autônomo</option>
+          <option value="PJ">PJ</option>
+          <option value="Servidor Público">Servidor Público</option>
+          <option value="Desempregado">Desempregado</option>
+        </select>
+      </div>
+
+      <div class="field checkbox-field">
+        <input type="checkbox" id="atividadeRemunerada" name="atividadeRemunerada">
+        <label for="atividadeRemunerada">Possui Atividade Remunerada?</label>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Moradia e Renda</legend>
+
+      <div class="field">
+        <label for="tipoHabitacao">Tipo de Habitação</label>
+        <select id="tipoHabitacao" name="tipoHabitacao">
+          <option value="">Selecione</option>
+          <option value="Casa própria">Casa própria</option>
+          <option value="Casa alugada">Casa alugada</option>
+          <option value="Coletiva (república)">Coletiva (república)</option>
+          <option value="Outro">Outro</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="moraComQuem">Mora com quem?</label>
+        <input type="text" id="moraComQuem" name="moraComQuem" placeholder="Ex: Pais, avós, sozinho(a)">
+      </div>
+
+      <div class="field">
+        <label for="qtdResidentes">Quantidade de Residentes</label>
+        <input type="number" id="qtdResidentes" name="qtdResidentes" min="1" step="1" placeholder="Ex: 4">
+      </div>
+
+      <div class="field">
+        <label for="rendaFamiliar">Renda Familiar Mensal <span class="req">*</span></label>
+        <select id="rendaFamiliar" name="rendaFamiliar" required>
+          <option value="">Selecione</option>
+          <option value="Até 1 SM">Até 1 Salário Mínimo</option>
+          <option value="1 a 3 SM">1 a 3 Salários Mínimos</option>
+          <option value="3 a 5 SM">3 a 5 Salários Mínimos</option>
+          <option value="5 a 10 SM">5 a 10 Salários Mínimos</option>
+          <option value="Acima de 10 SM">Acima de 10 Salários Mínimos</option>
+        </select>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Benefícios Sociais</legend>
+
+      <div class="field checkbox-field">
+        <input type="checkbox" id="possuiCadUnico" name="possuiCadUnico">
+        <label for="possuiCadUnico">Possui CadÚnico?</label>
+      </div>
+
+      <div class="field">
+        <label for="numeroNis">Número do NIS<span class="req" id="req-nis" hidden> *</span></label>
+        <input type="text" id="numeroNis" name="numeroNis" inputmode="numeric" pattern="\d*" placeholder="Apenas números">
+      </div>
+
+      <div class="field">
+        <label for="beneficioGoverno">Recebe Benefício do Governo?<span class="req" id="req-beneficio" hidden> *</span></label>
+        <select id="beneficioGoverno" name="beneficioGoverno">
+          <option value="">Selecione</option>
+          <option value="Nenhum">Nenhum</option>
+          <option value="BPC">BPC</option>
+          <option value="Auxílio Estadual">Auxílio Estadual</option>
+          <option value="Bolsa Família">Bolsa Família</option>
+          <option value="Outro">Outro</option>
+        </select>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Deslocamento</legend>
+
+      <div class="field">
+        <label for="transporteTreino">Meio de Transporte para Treino</label>
+        <select id="transporteTreino" name="transporteTreino">
+          <option value="">Selecione</option>
+          <option value="Ônibus">Ônibus</option>
+          <option value="Carro">Carro</option>
+          <option value="Bicicleta">Bicicleta</option>
+          <option value="A pé">A pé</option>
+          <option value="Outro">Outro</option>
+        </select>
+      </div>
+    </fieldset>
+
+    <button type="submit" id="btn-enviar">Enviar</button>
+    <div id="submit-status" class="status-msg"></div>
+  </form>
+</div>
+
+<script src="socioeconomico.js"></script>
+
+</body>
+</html>
