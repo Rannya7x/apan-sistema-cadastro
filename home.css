@@ -1,0 +1,117 @@
+/* RESET E CONFIGURAÇÕES BÁSICAS */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+}
+
+body {
+    background-color: #f3f4f6;
+    color: #1f2937;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* CONTAINER PRINCIPAL */
+.portal-card {
+    background-color: #ffffff;
+    width: 100%;
+    max-width: 520px;
+    padding: 40px 30px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    text-align: center;
+}
+
+.portal-header h1 {
+    font-size: 1.75rem;
+    color: #1e3a8a;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.portal-header p {
+    font-size: 0.95rem;
+    color: #6b7280;
+    margin-bottom: 30px;
+}
+
+/* GRADE DE BOTÕES */
+.button-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+/* ESTILO DOS BOTÕES (LINKS) */
+.nav-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 16px 20px;
+    background-color: #f8fafc;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.nav-btn .btn-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.nav-btn .btn-sub {
+    font-size: 0.82rem;
+    color: #64748b;
+    margin-top: 4px;
+}
+
+/* Efeito Hover nos botões secundários */
+.nav-btn:hover {
+    background-color: #f1f5f9;
+    border-color: #cbd5e1;
+    transform: translateY(-2px);
+}
+
+/* BOTÃO DESTAQUE (INSCRIÇÃO) */
+.nav-btn.primary {
+    background-color: #2563eb;
+    border-color: #2563eb;
+}
+
+.nav-btn.primary .btn-title,
+.nav-btn.primary .btn-sub {
+    color: #ffffff;
+}
+
+.nav-btn.primary .btn-sub {
+    opacity: 0.9;
+}
+
+.nav-btn.primary:hover {
+    background-color: #1d4ed8;
+    border-color: #1d4ed8;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+}
+
+/* AJUSTES PARA DISPOSITIVOS MÓVEIS */
+@media (max-width: 480px) {
+    .portal-card {
+        padding: 30px 20px;
+    }
+
+    .portal-header h1 {
+        font-size: 1.45rem;
+    }
+
+    .nav-btn {
+        padding: 14px 16px;
+    }
+}

@@ -1,0 +1,231 @@
+/* RESET E ESTILOS GERAIS */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+}
+
+body {
+    background-color: #f3f4f6;
+    color: #1f2937;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 30px 15px;
+}
+
+/* CONTAINER */
+.container {
+    background-color: #ffffff;
+    width: 100%;
+    max-width: 620px;
+    padding: 35px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.form-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.form-header h1 {
+    font-size: 1.6rem;
+    color: #1e3a8a;
+    font-weight: 700;
+}
+
+.form-header p {
+    font-size: 1rem;
+    color: #6b7280;
+    margin-top: 5px;
+}
+
+/* CAMPOS DE TEXTO / DATA / FILE */
+.form-group {
+    margin-bottom: 22px;
+}
+
+.form-group > label, .group-title {
+    display: block;
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 8px;
+}
+
+input[type="text"],
+input[type="date"],
+input[type="email"],
+input[type="tel"],
+input[type="file"] {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 0.95rem;
+    color: #1f2937;
+    background-color: #f9fafb;
+    border: 1.5px solid #d1d5db;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    outline: none;
+}
+
+input[type="file"] {
+    background-color: #ffffff;
+    cursor: pointer;
+}
+
+input:focus {
+    border-color: #2563eb;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.help-text {
+    font-size: 0.8rem;
+    color: #6b7280;
+    margin-top: 4px;
+    display: block;
+}
+
+/* ESTILIZAÇÃO DOS RADIOS (BOTÕES INTERATIVOS) */
+.radio-options {
+    display: grid;
+    gap: 10px;
+}
+
+.radio-options.horizontal {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.radio-options.grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.radio-options.vertical {
+    grid-template-columns: 1fr;
+}
+
+.radio-card {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    background-color: #f9fafb;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.radio-card:hover {
+    border-color: #9ca3af;
+    background-color: #f3f4f6;
+}
+
+.radio-card input[type="radio"] {
+    accent-color: #2563eb;
+    width: 18px;
+    height: 18px;
+    margin-right: 12px;
+    cursor: pointer;
+}
+
+.radio-card span {
+    font-size: 0.9rem;
+    color: #374151;
+    font-weight: 500;
+}
+
+.radio-card:has(input:checked) {
+    border-color: #2563eb;
+    background-color: #eff6ff;
+}
+
+/* CAMPOS DINÂMICOS (ESCONDIDOS POR PADRÃO) */
+.conditional-field {
+    display: none;
+    background-color: #f8fafc;
+    padding: 18px;
+    border-radius: 10px;
+    border-left: 4px solid #2563eb;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.conditional-field.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* BOTÃO ENVIAR */
+.btn-submit {
+    width: 100%;
+    padding: 14px;
+    background-color: #2563eb;
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.btn-submit:hover {
+    background-color: #1d4ed8;
+}
+
+.btn-submit:active {
+    transform: scale(0.99);
+}
+
+/* BOTÃO DE VOLTAR */
+.btn-voltar {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #4b5563;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    margin-bottom: 20px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.btn-voltar:hover {
+    color: #1e3a8a;
+    background-color: #f3f4f6;
+}
+
+.btn-voltar svg {
+    transition: transform 0.2s ease;
+}
+
+.btn-voltar:hover svg {
+    transform: translateX(-3px);
+}
+
+/* RESPONSIVIDADE PARA CELULAR */
+@media (max-width: 500px) {
+    .container {
+        padding: 22px 18px;
+    }
+
+    .radio-options.grid-2 {
+        grid-template-columns: 1fr;
+    }
+}
