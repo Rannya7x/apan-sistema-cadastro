@@ -1,11 +1,45 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
     <title>Document</title>
+    <script src="script.js" defer></script>
 </head>
 <body>
-    
+    <div id="tela-consulta" class="tela">
+  <header>
+    <button id="btn-voltar-consulta" class="btn-voltar">← Voltar</button>
+    <h1>🔍 Consultar Inscrição</h1>
+  </header>
+
+  <main>
+    <!-- Área de busca -->
+    <div id="area-busca">
+      <div class="form-group">
+        <label for="cpf-consulta">CPF do Atleta</label>
+        <input 
+          type="text" 
+          id="cpf-consulta" 
+          placeholder="000.000.000-00" 
+          maxlength="14"
+        >
+      </div>
+      <button id="btn-buscar" class="btn-principal" style="text-align:center;">
+        🔍 Buscar Atleta
+      </button>
+    </div>
+
+    <!-- Área de resultados -->
+    <div id="area-resultados" style="display:none">
+      <!-- Será preenchida dinamicamente pelo JavaScript -->
+      <div id="resultado-conteudo"></div>
+    </div>
+
+    <!-- Área de erro -->
+    <div id="area-erro" style="display:none" class="mensagem-erro"></div>
+  </main>
+</div>
 </body>
 </html>
