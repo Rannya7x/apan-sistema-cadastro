@@ -12,7 +12,13 @@
 <body>
     <div id="tela-consulta" class="tela">
   <header>
-    <a href="tela_inicial.html" id="btn-voltar-consulta" class="btn-voltar">← Voltar</a>
+    <a href="tela_inicial.html" class="btn-voltar">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            Voltar para o Início
+    </a>
     <h1>🔍 Consultar Inscrição</h1>
   </header>
 
@@ -28,15 +34,20 @@
           maxlength="14"
         >
       </div>
-      <button id="btn-buscar" class="btn-principal" style="text-align:center;">
+      <button onclick="filtrarAtletasPorCpf()" id="btn-buscar" class="btn-principal" style="text-align:center;">
         🔍 Buscar Atleta
       </button>
     </div>
 
     <!-- Área de resultados -->
     <div id="area-resultados" style="display:none">
-      <!-- Será preenchida dinamicamente pelo JavaScript -->
-      <div id="resultado-conteudo"></div>
+      <!-- Loading (inicialmente oculto) -->
+      <div id="loading-indicator" style="display:none; text-align:center; padding:20px;">
+          <div class="spinner"></div>
+          <p>Carregando atletas...</p>
+      </div>
+        <!-- Resultados serão injetados aqui -->
+        <div id="resultado-conteudo"></div>
     </div>
 
     <!-- Área de erro -->

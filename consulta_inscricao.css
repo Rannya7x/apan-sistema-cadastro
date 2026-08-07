@@ -132,6 +132,30 @@
   margin-top: 20px;
 }
 
+
+/* Spinner (animação de rotação) */
+.spinner {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #1a73e8;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 10px auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+#loading-indicator p {
+  color: #666;
+  font-size: 14px;
+  margin-top: 8px;
+}
+
+
 /* Cabeçalho da lista (contador + botão recarregar) */
 .lista-header {
   display: flex;
