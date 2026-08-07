@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inscrição Unificada — APAN & CBAt</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="cadastro.css">
+</head>
+<body>
+
+  <main class="page-wrapper">
+    <div class="form-card">
+      <header class="form-header">
+        <h1>Inscrição</h1>
+        <p class="subtitle">APAN & Iniciação ao Atletismo (CBAt)</p>
+      </header>
+
+      <form class="unified-form" action="#" method="POST" enctype="multipart/form-data">
+
+        <!-- ETAPA 1: TIPO DE INSCRIÇÃO -->
+        <fieldset class="form-section">
+          <legend>1. Tipo de Preenchimento</legend>
+          <div class="input-group full-width">
+            <label for="tipo-responsavel">Você está preenchendo este cadastro para:</label>
+            <select id="tipo-responsavel" name="tipo_responsavel" required>
+              <option value="" disabled selected>Selecione uma opção...</option>
+              <option value="proprio">Mim mesmo (Atleta / Membro maior de idade)</option>
+              <option value="terceiro">Outra pessoa (Filho, dependente ou tutelado)</option>
+            </select>
+          </div>
+        </fieldset>
+
+        <!-- ETAPA 2: DADOS PESSOAIS E CONTATO -->
+        <fieldset class="form-section">
+          <legend>2. Dados Pessoais & Contato</legend>
+          <div class="grid-2">
+            <div class="input-group full-width">
+              <label for="nome">Nome Completo *</label>
+              <input type="text" id="nome" name="nome" placeholder="Ex: João da Silva" required>
+            </div>
+
+            <div class="input-group">
+              <label for="cpf">CPF *</label>
+              <input type="text" id="cpf" name="cpf" placeholder="000.000.000-00" required maxlength="14">
+            </div>
+
+            <div class="input-group">
+              <label for="rg">RG *</label>
+              <input type="text" id="rg" name="rg" placeholder="Digite o RG" required>
+            </div>
+
+            <div class="input-group">
+              <label for="data-nascimento">Data de Nascimento *</label>
+              <input type="date" id="data-nascimento" name="data_nascimento" required>
+            </div>
+
+            <div class="input-group">
+              <label for="genero">Gênero *</label>
+              <select id="genero" name="genero" required>
+                <option value="" disabled selected>Selecione...</option>
+                <option value="masculino">Masculino</option>
+                <option value="feminino">Feminino</option>
+                <option value="outro">Outro / Prefiro não informar</option>
+              </select>
+            </div>
+
+            <div class="input-group">
+              <label for="estado-civil">Estado Civil</label>
+              <select id="estado-civil" name="estado_civil">
+                <option value="" disabled selected>Selecione...</option>
+                <option value="solteiro">Solteiro(a)</option>
+                <option value="casado">Casado(a)</option>
+                <option value="divorciado">Divorciado(a)</option>
+                <option value="viuvo">Viúvo(a)</option>
+              </select>
+            </div>
+
+            <div class="input-group">
+              <label for="tipo-sanguineo">Tipo Sanguíneo *</label>
+              <select id="tipo-sanguineo" name="tipo_sanguineo" required>
+                <option value="" disabled selected>Selecione...</option>
+                <option value="A+">A+</option>
+                <option value="A-">A-</option>
+                <option value="B+">B+</option>
+                <option value="B-">B-</option>
+                <option value="AB+">AB+</option>
+                <option value="AB-">AB-</option>
+                <option value="O+">O+</option>
+                <option value="O-">O-</option>
+              </select>
+            </div>
+
+            <div class="input-group">
+              <label for="email">E-mail de Contato *</label>
+              <input type="email" id="email" name="email" placeholder="seuemail@exemplo.com" required>
+            </div>
+
+            <div class="input-group">
+              <label for="telefone">Telefone / WhatsApp *</label>
+              <input type="tel" id="telefone" name="telefone" placeholder="(00) 00000-0000" required>
+            </div>
+
+            <div class="input-group">
+              <label for="nome-mae">Nome da Mãe *</label>
+              <input type="text" id="nome-mae" name="nome_mae" placeholder="Nome completo da mãe" required>
+            </div>
+
+            <div class="input-group">
+              <label for="nome-pai">Nome do Pai</label>
+              <input type="text" id="nome-pai" name="nome_pai" placeholder="Nome completo do pai">
+            </div>
+
+            <div class="input-group full-width">
+              <label for="endereco">Endereço Completo com CEP *</label>
+              <input type="text" id="endereco" name="endereco" placeholder="Rua, Número, Bairro, Cidade - UF, CEP" required>
+            </div>
+
+            <div class="input-group full-width">
+              <label for="escola-faculdade">Escola ou Faculdade (se estudante)</label>
+              <input type="text" id="escola-faculdade" name="escola_faculdade" placeholder="Nome da instituição de ensino">
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- ETAPA 3: RESPONSÁVEL LEGAL (CBAT / MENORES) -->
+        <fieldset class="form-section">
+          <legend>3. Dados do Responsável Legal (Menores de 18 anos)</legend>
+          <div class="grid-2">
+            <div class="input-group full-width">
+              <label for="nome-responsavel">Nome do Responsável Legal</label>
+              <input type="text" id="nome-responsavel" name="nome_responsavel" placeholder="Ex: Maria Silva">
+            </div>
+
+            <div class="input-group">
+              <label for="cpf-responsavel">CPF do Responsável</label>
+              <input type="text" id="cpf-responsavel" name="cpf_responsavel" placeholder="000.000.000-00">
+            </div>
+
+            <div class="input-group">
+              <label for="tel-responsavel">Telefone / WhatsApp do Responsável</label>
+              <input type="tel" id="tel-responsavel" name="tel_responsavel" placeholder="(00) 00000-0000">
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- ETAPA 4: DADOS DE PERFIL E DADOS BANCÁRIOS (APAN) -->
+        <fieldset class="form-section">
+          <legend>4. Função na APAN & Dados Profissionais</legend>
+          <div class="grid-2">
+            <div class="input-group">
+              <label for="funcao-apan">Função Principal na APAN *</label>
+              <select id="funcao-apan" name="funcao_apan" required>
+                <option value="" disabled selected>Selecione...</option>
+                <option value="Atleta">Atleta</option>
+                <option value="Treinador">Treinador / Técnico</option>
+                <option value="Staff">Staff / Equipe de Apoio</option>
+                <option value="Outro">Outro</option>
+              </select>
+            </div>
+
+            <div class="input-group">
+              <label for="modalidade">Modalidade Esportiva</label>
+              <input type="text" id="modalidade" name="modalidade" placeholder="Ex: Atletismo, Corrida de Rua">
+            </div>
+
+            <div class="input-group">
+              <label for="pis">PIS / PASEP</label>
+              <input type="text" id="pis" name="pis" placeholder="Número do PIS">
+            </div>
+
+            <div class="input-group">
+              <label for="registro-profissional">Registro Profissional / Autônomo</label>
+              <input type="text" id="registro-profissional" name="registro_profissional" placeholder="Nº do registro se houver">
+            </div>
+
+            <div class="input-group full-width">
+              <label for="dados-bancarios">Dados Bancários (Banco, Agência e Conta)</label>
+              <input type="text" id="dados-bancarios" name="dados_bancarios" placeholder="Banco X | Agência: 0000 | Conta: 00000-0">
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- ETAPA 5: ACESSIBILIDADE E DEFICIÊNCIA (PCD) -->
+        <fieldset class="form-section">
+          <legend>5. Acessibilidade e Informações PCD</legend>
+          <div class="grid-2">
+            <div class="input-group">
+              <label for="possui-deficiencia">Possui Deficiência? *</label>
+              <select id="possui-deficiencia" name="possui_deficiencia" required>
+                <option value="nao" selected>Não</option>
+                <option value="sim">Sim</option>
+              </select>
+            </div>
+
+            <div class="input-group">
+              <label for="tipo-deficiencia">Tipo de Deficiência</label>
+              <input type="text" id="tipo-deficiencia" name="tipo_deficiencia" placeholder="Física, Visual, Auditiva, Intelectual...">
+            </div>
+
+            <div class="input-group">
+              <label for="cid">CID do Laudo Médico</label>
+              <input type="text" id="cid" name="cid" placeholder="Ex: H54, G80...">
+            </div>
+
+            <div class="input-group">
+              <label for="tecnologia-assistiva">Tecnologia Assistiva / Apoio Utilizado</label>
+              <input type="text" id="tecnologia-assistiva" name="tecnologia_assistiva" placeholder="Cadeira de rodas, Muletas, Bengala, Cão-guia, Libras">
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- ETAPA 6: UNIFORMES E VESTUÁRIO -->
+        <fieldset class="form-section">
+          <legend>6. Uniformes e Indumentária Esportiva</legend>
+          <div class="grid-3">
+            <div class="input-group">
+              <label for="tam-camisa">Tamanho Camiseta *</label>
+              <select id="tam-camisa" name="tam_camisa" required>
+                <option value="" disabled selected>Selecione...</option>
+                <option value="PP">PP</option>
+                <option value="P">P</option>
+                <option value="M">M</option>
+                <option value="G">G</option>
+                <option value="GG">GG</option>
+                <option value="XG">XG</option>
+              </select>
+            </div>
+
+            <div class="input-group">
+              <label for="tam-agasalho">Tamanho Agasalho</label>
+              <select id="tam-agasalho" name="tam_agasalho">
+                <option value="" disabled selected>Selecione...</option>
+                <option value="P">P</option>
+                <option value="M">M</option>
+                <option value="G">G</option>
+                <option value="GG">GG</option>
+              </select>
+            </div>
+
+            <div class="input-group">
+              <label for="tam-short">Tamanho Short / Bermuda</label>
+              <select id="tam-short" name="tam_short">
+                <option value="" disabled selected>Selecione...</option>
+                <option value="P">P</option>
+                <option value="M">M</option>
+                <option value="G">G</option>
+                <option value="GG">GG</option>
+              </select>
+            </div>
+
+            <div class="input-group">
+              <label for="tam-tenis">Tamanho Tênis</label>
+              <input type="number" id="tam-tenis" name="tam_tenis" placeholder="Ex: 40" min="20" max="50">
+            </div>
+
+            <div class="input-group">
+              <label for="tam-sapatilha">Tamanho Sapatilha (CBAt)</label>
+              <input type="number" id="tam-sapatilha" name="tam_sapatilha" placeholder="Ex: 39" min="20" max="50">
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- ETAPA 7: DOCUMENTOS E ANEXOS -->
+        <fieldset class="form-section">
+          <legend>7. Upload de Documentos</legend>
+          <div class="grid-2">
+            <div class="input-group full-width">
+              <label for="foto">Foto de Rosto (Padrão CBAt) *</label>
+              <span class="field-hint">Enquadramento acima dos ombros, fundo branco, boa iluminação.</span>
+              <input type="file" id="foto" name="foto" accept="image/*" required>
+            </div>
+
+            <div class="input-group">
+              <label for="doc-rg-cpf">RG e CPF / CNH (PDF ou Imagem) *</label>
+              <input type="file" id="doc-rg-cpf" name="doc_rg_cpf" accept=".pdf,image/*" required>
+            </div>
+
+            <div class="input-group">
+              <label for="comprovante-residencia">Comprovante de Residência *</label>
+              <input type="file" id="comprovante-residencia" name="comprovante_residencia" accept=".pdf,image/*" required>
+            </div>
+
+            <div class="input-group">
+              <label for="cartao-sus">Cartão do SUS</label>
+              <input type="file" id="cartao-sus" name="cartao_sus" accept=".pdf,image/*">
+            </div>
+
+            <div class="input-group">
+              <label for="laudo-medico">Laudo Médico (se PCD)</label>
+              <input type="file" id="laudo-medico" name="laudo_medico" accept=".pdf,image/*">
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- ETAPA 8: DECLARAÇÕES E TERMOS -->
+        <fieldset class="form-section">
+          <legend>8. Termos & Autorizações</legend>
+          <div class="checkbox-group">
+            <label class="checkbox-item">
+              <input type="checkbox" name="termo_imagem" required>
+              <span>Autorizo o uso de imagem para fins institucionais e de divulgação esportiva.</span>
+            </label>
+
+            <label class="checkbox-item">
+              <input type="checkbox" name="termo_whatsapp" required>
+              <span>Estou ciente do Código de Conduta para grupos oficiais do WhatsApp.</span>
+            </label>
+
+            <label class="checkbox-item">
+              <input type="checkbox" name="termo_lgpd" required>
+              <span>Concordo com o tratamento dos dados pessoais segundo as diretrizes da LGPD e os regulamentos da APAN e CBAt.</span>
+            </label>
+          </div>
+        </fieldset>
+
+        <button type="submit" class="btn-submit">Finalizar e Enviar Cadastro</button>
+
+      </form>
+    </div>
+  </main>
+
+</body>
+</html>
