@@ -13,16 +13,25 @@
   <p class="subtitle">Preencha os dados abaixo. Campos marcados com * são obrigatórios.</p>
 
   <form id="socio-form" action="#" method="post">
+    <!-- Área de busca -->
+    <div id="area-busca">
+      <div class="form-group">
+        <label for="cpf-consulta">CPF do Atleta</label>
+        <input 
+          type="text" 
+          id="cpf-consulta" 
+          placeholder="000.000.000-00" 
+          maxlength="14"
+        >
+      </div>
+      <button id="btn-buscar" class="btn-principal" style="text-align:center;">
+        🔍 Buscar Atleta
+      </button>
+    </div>
+
 
     <fieldset>
       <legend>Documentação</legend>
-
-      <div class="field">
-        <label for="cpf">CPF <span class="req">*</span></label>
-        <input type="text" id="cpf" name="cpf" placeholder="000.000.000-00"
-               pattern="\d{3}\.\d{3}\.\d{3}-\d{2}|\d{11}" maxlength="14" required>
-        <small class="hint">Formato: 000.000.000-00 (ou apenas 11 números).</small>
-      </div>
 
       <div class="field">
         <label for="rg">RG</label>

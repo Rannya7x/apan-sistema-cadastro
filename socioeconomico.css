@@ -39,6 +39,55 @@ form {
   text-align: left;
 }
 
+/*BUSCA CPF*/
+
+#area-busca {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 24px;
+}
+
+#area-busca .form-group {
+  margin-bottom: 16px;
+}
+
+#area-busca input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid #dee2e6;
+  border-radius: 8px;
+  font-size: 16px;
+  background: white;
+}
+
+#area-busca input:focus {
+  outline: none;
+  border-color: #1a73e8;
+}
+
+#btn-buscar {
+  width: 100%;
+  padding: 14px;
+  background: #1a73e8;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+#btn-buscar:hover {
+  background: #1557b0;
+}
+
+#btn-buscar:disabled {
+  background: #6c757d;
+  cursor: not-allowed;
+}
+
 fieldset {
   border: 1px solid #e9ecef;
   border-radius: 14px;
