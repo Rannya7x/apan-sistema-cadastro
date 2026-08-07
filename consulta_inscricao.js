@@ -1,7 +1,19 @@
 import { supabase } from './src/lib/supabase.js';
 console.log('Cliente importado:', supabase);
 
+let atletasCache = [];
+
 async function carregarTodosAtletas() {
+  const areaResultados = document.getElementById('area-resultados');
+  const loading = document.getElementById('loading-indicator');
+  const conteudo = document.getElementById('resultado-conteudo');
+  const areaErro = document.getElementById('area-erro');
+
+  loading.style.display = 'block';
+  conteudo.innerHTML = ''; // limpa resultados antigos
+  areaErro.style.display = 'none';
+  areaResultados.style.display = 'block'; // garante que a área fique visível
+
   try {
     const { data: atletas, error } = await supabase
       .from('atletas')
@@ -16,7 +28,10 @@ async function carregarTodosAtletas() {
       `)
       .order('nome_completo') // ordena por nome
 
+    loading.style.display = 'none';
+
     if (error) {
+      areaErro.style.display = 'block';
       console.error('Erro ao buscar atletas:', error)
       return
     }
@@ -25,7 +40,7 @@ async function carregarTodosAtletas() {
       console.error('Nenhum atleta cadastrado ainda.')
       return
     }
-
+    atletasCache = atletas;
     exibirListaAtletas(atletas)
 
   } catch (err) {
@@ -33,6 +48,44 @@ async function carregarTodosAtletas() {
   }
 }
 
+//BUSCA POR CPF
+window.filtrarAtletasPorCpf = function () {
+  const input = document.getElementById('cpf-consulta');
+  const cpf = input.value.replace(/[^0-9]/g, ''); // remove pontuação
+
+  // Se o campo estiver vazio, recarrega a lista completa
+  if (!cpf || cpf.length === 0) {
+    exibirListaAtletas(atletasCache);
+    return;
+  }
+
+  // Filtrar a lista em cache
+  const atletasFiltrados = atletasCache.filter(atleta => {
+    // Remove pontuação do CPF do atleta para comparação
+    const cpfAtleta = (atleta.cpf || '').replace(/[^0-9]/g, '');
+    return cpfAtleta.includes(cpf); // busca parcial (ou use === para exato)
+  });
+
+  // Se encontrou, exibe os filtrados; senão, exibe mensagem
+  if (atletasFiltrados.length > 0) {
+    exibirListaAtletas(atletasFiltrados);
+  } else {
+    exibirMensagemNaoEncontrado(cpf);
+  }
+}
+
+function exibirMensagemNaoEncontrado(cpf) {
+  const conteudo = document.getElementById('resultado-conteudo');
+  const areaErro = document.getElementById('area-erro');
+  areaErro.style.display = 'none'; // esconde erros
+
+  conteudo.innerHTML = `
+    <div class="mensagem-info" style="text-align:center; padding:20px; color:#6c757d;">
+      <p>🔍 Nenhum atleta encontrado com o CPF <strong>${cpf}</strong>.</p>
+      <p style="font-size:14px;">Tente novamente ou verifique o número digitado.</p>
+    </div>
+  `;
+}
 
 // EXIBIR LISTA DE ATLETAS (cards compactos)
 
@@ -106,7 +159,6 @@ function exibirDetalhesAtleta(atleta) {
   areaErro.style.display = 'none'
   areaResultados.style.display = 'block'
 
-  // Use o mesmo HTML que você já tinha para exibir os detalhes
   let html = `
     <button id="btn-voltar-lista" class="btn-pequeno">← Voltar para lista</button>
     <div class="card-dados">
