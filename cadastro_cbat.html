@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inscrição Unificada — APAN & CBAt</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="cadastro_cbat.css">
+</head>
+<body>
+
+  <main class="page-wrapper">
+    <div class="form-card">
+      <a href="tela_inicial.html" id="btn-voltar-consulta" class="btn-voltar">← Voltar</a>
+      <header class="form-header">
+        <h1>Inscrição</h1>
+        <p class="subtitle">APAN & Iniciação ao Atletismo (CBAt)</p>
+      </header>
+
+      <form class="unified-form" action="#" method="POST" enctype="multipart/form-data">
+        <div id="area-busca">
+          <div class="form-group">
+            <label for="cpf-consulta">CPF do Atleta</label>
+            <input 
+              type="text" 
+              id="cpf-consulta" 
+              placeholder="000.000.000-00" 
+              maxlength="14"
+            >
+          </div>
+          <button id="btn-buscar" class="btn-principal" style="text-align:center;">
+            🔍 Buscar Atleta
+          </button>
+        </div>
+
+        <!-- DOCUMENTOS E ANEXOS -->
+        <fieldset class="form-section">
+          <legend>Upload de Documentos</legend>
+          <div class="grid-2">
+            <div class="input-group full-width">
+              <label for="foto">Foto de Rosto (Padrão CBAt) *</label>
+              <span class="field-hint">Enquadramento acima dos ombros, fundo branco, boa iluminação.</span>
+              <input type="file" id="foto" name="foto" accept="image/*" required>
+            </div>
+
+            <div class="input-group">
+              <label for="doc-rg-cpf">RG e CPF / CNH (PDF ou Imagem) *</label>
+              <input type="file" id="doc-rg-cpf" name="doc_rg_cpf" accept=".pdf,image/*" required>
+            </div>
+
+            <div class="input-group">
+              <label for="comprovante-residencia">Comprovante de Residência *</label>
+              <input type="file" id="comprovante-residencia" name="comprovante_residencia" accept=".pdf,image/*" required>
+            </div>
+
+            <div class="input-group">
+              <label for="cartao-sus">Cartão do SUS</label>
+              <input type="file" id="cartao-sus" name="cartao_sus" accept=".pdf,image/*">
+            </div>
+
+            <div class="input-group">
+              <label for="laudo-medico">Laudo Médico (se PCD)</label>
+              <input type="file" id="laudo-medico" name="laudo_medico" accept=".pdf,image/*">
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- ETAPA 8: DECLARAÇÕES E TERMOS -->
+        <fieldset class="form-section">
+          <legend>8. Termos & Autorizações</legend>
+          <div class="checkbox-group">
+            <label class="checkbox-item">
+              <input type="checkbox" name="termo_imagem" required>
+              <span>Autorizo o uso de imagem para fins institucionais e de divulgação esportiva.</span>
+            </label>
+
+            <label class="checkbox-item">
+              <input type="checkbox" name="termo_whatsapp" required>
+              <span>Estou ciente do Código de Conduta para grupos oficiais do WhatsApp.</span>
+            </label>
+
+            <label class="checkbox-item">
+              <input type="checkbox" name="termo_lgpd" required>
+              <span>Concordo com o tratamento dos dados pessoais segundo as diretrizes da LGPD e os regulamentos da APAN e CBAt.</span>
+            </label>
+          </div>
+        </fieldset>
+
+        <button type="submit" class="btn-submit">Finalizar e Enviar Cadastro</button>
+
+      </form>
+    </div>
+  </main>
+
+</body>
+</html>
