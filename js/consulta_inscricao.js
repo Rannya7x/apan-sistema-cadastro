@@ -120,6 +120,29 @@ function exibirMensagemNaoEncontrado(cpf) {
 }
 
 // ============================================
+// INICIALIZAÇÃO E EVENTOS
+// ============================================
+document.addEventListener('DOMContentLoaded', () => {
+  // Carrega os dados
+  carregarTodosAtletas();
+
+  // Máscara de CPF no campo de busca
+  const inputCpf = document.getElementById('cpf-consulta');
+  if (inputCpf) {
+    inputCpf.addEventListener('input', (e) => {
+      let value = e.target.value.replace(/\D/g, "");
+      if (value.length > 11) value = value.slice(0, 11);
+      
+      value = value.replace(/(\d{3})(\d)/, "$1.$2");
+      value = value.replace(/(\d{3})(\d)/, "$1.$2");
+      value = value.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+      
+      e.target.value = value;
+    });
+  }
+});
+
+// ============================================
 // EXIBIR LISTA COMPACTA DE CARDS
 // ============================================
 function exibirListaAtletas(atletas) {
@@ -145,21 +168,14 @@ function exibirListaAtletas(atletas) {
     html += `
       <div class="card-lista" data-id="${atleta.id}" style="background:#fff; border:1px solid #e9ecef; border-radius:12px; padding:18px; margin-bottom:16px; box-shadow:0 2px 8px rgba(0,0,0,0.04);">
         <div style="display:flex; align-items:center; gap:16px;">
-          
           <div style="width:64px; height:64px; min-width:64px; border-radius:50%; overflow:hidden; border:2px solid #1a73e8; background:#e7f3ff;">
-            <img 
-              src="${foto}" 
-              alt="Atleta" 
-              style="width:100%; height:100%; object-fit:cover;"
-            >
+            <img src="${foto}" alt="Atleta" style="width:100%; height:100%; object-fit:cover;">
           </div>
-          
           <div style="flex:1; min-width:0;">
             <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
               <strong style="font-size:18px; color:#1a73e8; word-break:break-word;">${atleta.nome_completo}</strong>
               <span class="badge" style="background:#e7f3ff; color:#1a73e8; padding:4px 10px; border-radius:20px; font-size:12px; font-weight:600; white-space:nowrap;">${pcdText}</span>
             </div>
-            
             <div style="display:flex; gap:16px; margin-top:8px; font-size:14px; color:#6c757d; flex-wrap:wrap;">
               <span><strong>CPF:</strong> ${formatarCPF(atleta.cpf)}</span>
               <span><strong>Módulo:</strong> ${atleta.modulo || 'Não informado'}</span>
@@ -167,7 +183,6 @@ function exibirListaAtletas(atletas) {
             </div>
           </div>
         </div>
-
         <div style="margin-top:14px; text-align:right;">
           <button class="btn-detalhes" data-id="${atleta.id}" style="background:#1a73e8; color:#fff; border:none; padding:8px 18px; border-radius:8px; font-weight:600; cursor:pointer;">
             📄 Ver Detalhes Completos
@@ -179,7 +194,6 @@ function exibirListaAtletas(atletas) {
 
   conteudo.innerHTML = html;
 
-  // Eventos dos botões "Ver Detalhes"
   document.querySelectorAll('.btn-detalhes').forEach(btn => {
     btn.addEventListener('click', () => {
       const id = btn.dataset.id;
@@ -206,25 +220,16 @@ function exibirDetalhesAtleta(atleta) {
     <button id="btn-voltar-lista" style="background:#f8f9fa; border:1px solid #dee2e6; padding:8px 16px; border-radius:8px; font-weight:600; cursor:pointer; margin-bottom:20px;">
       ← Voltar para a Lista
     </button>
-
     <div style="background:#fff; border-radius:14px; padding:24px; border:1px solid #e9ecef; box-shadow:0 4px 12px rgba(0,0,0,0.05);">
-      
-      <!-- Cabeçalho do Perfil -->
       <div style="display:flex; align-items:center; gap:20px; border-bottom:1px solid #eee; padding-bottom:20px; margin-bottom:20px; flex-wrap:wrap;">
         <div style="width:100px; height:100px; min-width:100px; border-radius:50%; overflow:hidden; border:3px solid #1a73e8; background:#e7f3ff;">
-          <img 
-            src="${fotoPerfil}" 
-            alt="Perfil Atleta" 
-            style="width:100%; height:100%; object-fit:cover;"
-          >
+          <img src="${fotoPerfil}" alt="Perfil Atleta" style="width:100%; height:100%; object-fit:cover;">
         </div>
         <div>
           <h2 style="margin:0; font-size:24px; color:#1a73e8;">${atleta.nome_completo}</h2>
           <p style="margin:4px 0 0; color:#6c757d; font-size:14px;">CPF: <strong>${formatarCPF(atleta.cpf)}</strong> | Módulo: <strong>${atleta.modulo || 'Não informado'}</strong></p>
         </div>
       </div>
-
-      <!-- SEÇÃO 1: DADOS CADASTRAIS (ATLETAS) -->
       <section style="margin-bottom:24px;">
         <h3 style="color:#1a73e8; font-size:16px; border-bottom:2px solid #e7f3ff; padding-bottom:6px; margin-bottom:12px;">📋 Dados Pessoais e Contato</h3>
         <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:12px; font-size:14px;">
@@ -237,89 +242,25 @@ function exibirDetalhesAtleta(atleta) {
           <div><strong>Possui Equipamentos:</strong> ${atleta.possui_equipamentos === 'sim' ? (atleta.qual_equipamento || 'Sim') : 'Não'}</div>
         </div>
       </section>
-
-      <!-- SEÇÃO 2: FICHA SOCIOECONÔMICA -->
       <section style="margin-bottom:24px;">
         <h3 style="color:#1a73e8; font-size:16px; border-bottom:2px solid #e7f3ff; padding-bottom:6px; margin-bottom:12px;">🏠 Ficha Socioeconômica</h3>
         <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:12px; font-size:14px;">
-          <div><strong>RG:</strong> ${socio.rg_numero || 'Não cadastrado'} (${socio.rg_orgao_expeditor || ''}/${socio.rg_uf || ''})</div>
+          <div><strong>RG:</strong> ${socio.rg_numero || 'Não cadastrado'}</div>
           <div><strong>Gênero:</strong> ${socio.genero || 'Não informado'}</div>
           <div><strong>Etnia:</strong> ${socio.etnia || 'Não informada'}</div>
           <div><strong>Estado Civil:</strong> ${socio.estado_civil || 'Não informado'}</div>
           <div><strong>Nome da Mãe:</strong> ${socio.nome_mae || 'Não informado'}</div>
-          <div><strong>Nome do Pai:</strong> ${socio.nome_pai || 'Não informado'}</div>
-          <div><strong>Contato de Emergência:</strong> ${socio.contato_emergencia || 'Não informado'}</div>
-          <div><strong>Escolaridade:</strong> ${socio.escolaridade_do_atleta || 'Não informada'}</div>
-          <div><strong>Atividade Remunerada:</strong> ${socio.possui_atividade_remunerada ? 'Sim' : 'Não'}</div>
-          <div><strong>Profissão Atual:</strong> ${socio.profissao_atual || 'Não informada'}</div>
-          <div><strong>Vínculo Empregatício:</strong> ${socio.vinculo_empregaticio || 'Não informado'}</div>
-          <div><strong>Habitação:</strong> ${socio.tipo_habitacao || 'Não informada'}</div>
-          <div><strong>Mora com Quem:</strong> ${socio.mora_com_quem || 'Não informado'}</div>
-          <div><strong>Residentes na Casa:</strong> ${socio.quantidade_residentes || 'Não informado'}</div>
           <div><strong>Renda Familiar:</strong> ${socio.renda_familiar_mensal || 'Não informada'}</div>
-          <div><strong>Possui CadÚnico:</strong> ${socio.possui_cadunico ? 'Sim' : 'Não'}</div>
-          <div><strong>Número do NIS:</strong> ${socio.numero_nis || 'Não informado'}</div>
-          <div><strong>Benefício do Governo:</strong> ${socio.recebe_beneficio_governo || 'Nenhum'}</div>
-          <div><strong>Transporte Treino:</strong> ${socio.meio_transporte_treino || 'Não informado'}</div>
         </div>
       </section>
-
-      <!-- SEÇÃO 3: DOCUMENTAÇÃO E TERMOS -->
-      <section>
-        <h3 style="color:#1a73e8; font-size:16px; border-bottom:2px solid #e7f3ff; padding-bottom:6px; margin-bottom:12px;">📁 Anexos e Termos Aceitos</h3>
-        
-        <!-- Status dos Termos -->
-        <div style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:16px; font-size:13px;">
-          <span style="padding:6px 12px; border-radius:6px; background:${doc.termo_imagem ? '#d1e7dd' : '#f8d7da'}; color:${doc.termo_imagem ? '#0f5132' : '#842029'};">
-            ${doc.termo_imagem ? '✓ Termo Uso de Imagem' : '✗ Termo de Imagem ausente'}
-          </span>
-          <span style="padding:6px 12px; border-radius:6px; background:${doc.termo_whatsapp ? '#d1e7dd' : '#f8d7da'}; color:${doc.termo_whatsapp ? '#0f5132' : '#842029'};">
-            ${doc.termo_whatsapp ? '✓ Código do WhatsApp' : '✗ Termo WhatsApp ausente'}
-          </span>
-          <span style="padding:6px 12px; border-radius:6px; background:${doc.termo_lgpd ? '#d1e7dd' : '#f8d7da'}; color:${doc.termo_lgpd ? '#0f5132' : '#842029'};">
-            ${doc.termo_lgpd ? '✓ Diretrizes LGPD' : '✗ Termo LGPD ausente'}
-          </span>
-        </div>
-
-        <!-- Links dos Documentos -->
-        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:12px;">
-          ${gerarLinkDocumento('Foto Rosto (CBAt)', doc.foto_url || atleta.foto_url)}
-          ${gerarLinkDocumento('Documento RG/CPF/CNH', doc.rg_cpf_url)}
-          ${gerarLinkDocumento('Comprovante Residência', doc.comprovante_residencia_url)}
-          ${gerarLinkDocumento('Cartão do SUS', doc.cartao_sus_url)}
-          ${gerarLinkDocumento('Laudo Médico (PCD)', doc.laudo_medico_url)}
-        </div>
-      </section>
-
     </div>
   `;
 
   conteudo.innerHTML = html;
-
-  document.getElementById('btn-voltar-lista')?.addEventListener('click', () => {
-    exibirListaAtletas(atletasCache);
-  });
+  document.getElementById('btn-voltar-lista')?.addEventListener('click', () => exibirListaAtletas(atletasCache));
 }
 
-// Helper para montar botão de link de documento
 function gerarLinkDocumento(titulo, url) {
-  if (!url) {
-    return `
-      <div style="padding:10px; background:#f8f9fa; border:1px solid #e9ecef; border-radius:8px; font-size:13px; color:#adb5bd;">
-        <strong>${titulo}:</strong> <br>Não enviado
-      </div>
-    `;
-  }
-
-  return `
-    <div style="padding:10px; background:#e7f3ff; border:1px solid #c5d5ea; border-radius:8px; font-size:13px;">
-      <strong style="color:#0c4a6e;">${titulo}:</strong> <br>
-      <a href="${url}" target="_blank" rel="noopener noreferrer" style="color:#1a73e8; font-weight:600; text-decoration:underline;">
-        🔗 Abrir Arquivo
-      </a>
-    </div>
-  `;
+  if (!url) return `<div style="padding:10px; background:#f8f9fa; border:1px solid #e9ecef; border-radius:8px; font-size:13px; color:#adb5bd;"><strong>${titulo}:</strong> <br>Não enviado</div>`;
+  return `<div style="padding:10px; background:#e7f3ff; border:1px solid #c5d5ea; border-radius:8px; font-size:13px;"><strong style="color:#0c4a6e;">${titulo}:</strong> <br><a href="${url}" target="_blank" rel="noopener noreferrer" style="color:#1a73e8; font-weight:600; text-decoration:underline;">🔗 Abrir Arquivo</a></div>`;
 }
-
-// Inicializa a consulta ao carregar a página
-document.addEventListener('DOMContentLoaded', carregarTodosAtletas);
