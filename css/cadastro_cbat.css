@@ -1,0 +1,321 @@
+/* ==========================================================================
+   RESET & CONFIGURAÇÕES GERAIS
+   ========================================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --primary: #1a73e8;
+  --primary-hover: #1557b0;
+  --bg-main: #eef1f5;
+  --card-bg: #ffffff;
+  --text-main: #212529;
+  --text-muted: #6c757d;
+  --border-color: #dee2e6;
+  --focus-ring: rgba(26, 115, 232, 0.12);
+  --radius: 14px;
+  --shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+}
+
+body {
+  font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  line-height: 1.5;
+  padding: 40px 20px;
+}
+
+/* ==========================================================================
+   LAYOUT DO CARD
+   ========================================================================== */
+.page-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.form-card {
+  background-color: var(--card-bg);
+  width: 100%;
+  max-width: 760px;
+  padding: 44px 48px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+/* BOTÃO DE VOLTAR PADRONIZADO */
+.btn-voltar {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #4b5563;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  margin-bottom: 24px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+}
+
+.btn-voltar:hover {
+  color: var(--primary);
+  background-color: #e7f3ff;
+  border-color: #c5d5ea;
+}
+
+.btn-voltar svg {
+  transition: transform 0.2s ease;
+}
+
+.btn-voltar:hover svg {
+  transform: translateX(-3px);
+}
+
+.form-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.form-header h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 6px;
+  letter-spacing: -0.3px;
+}
+
+.form-header .subtitle {
+  font-size: 15px;
+  color: var(--text-muted);
+}
+
+/* ==========================================================================
+   ÁREA DE BUSCA DE CPF
+   ========================================================================== */
+#area-busca {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 28px;
+  border: 1px solid #e9ecef;
+}
+
+#area-busca .form-group {
+  margin-bottom: 12px;
+}
+
+#area-busca label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: #495057;
+  margin-bottom: 7px;
+}
+
+#area-busca input {
+  width: 100%;
+  padding: 13px 15px;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  font-size: 15px;
+  background: white;
+  font-family: inherit;
+}
+
+#area-busca input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+.btn-principal {
+  width: 100%;
+  padding: 13px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.btn-principal:hover {
+  background: var(--primary-hover);
+}
+
+.btn-principal:active {
+  transform: scale(0.99);
+}
+
+/* ==========================================================================
+   FIELDSETS & SEÇÕES
+   ========================================================================== */
+.form-section {
+  border: 1px solid #e9ecef;
+  border-radius: 14px;
+  margin: 0 0 24px;
+  padding: 22px 24px 24px;
+  background: #fff;
+  transition: box-shadow 0.25s, border-color 0.25s;
+}
+
+.form-section:hover {
+  border-color: #c5d5ea;
+  box-shadow: 0 4px 12px rgba(26, 115, 232, 0.06);
+}
+
+.form-section legend {
+  padding: 0 8px;
+  font-weight: 600;
+  color: var(--primary);
+  font-size: 16px;
+  letter-spacing: -0.2px;
+}
+
+/* ==========================================================================
+   GRID E INPUTS DE ARQUIVO
+   ========================================================================== */
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-group label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #495057;
+  margin-bottom: 6px;
+}
+
+.field-hint {
+  font-size: 12.5px;
+  color: #8c959f;
+  margin-bottom: 6px;
+}
+
+.input-group input[type="file"] {
+  font-size: 13.5px;
+  padding: 10px 12px;
+  border: 1px dashed var(--border-color);
+  border-radius: 10px;
+  background-color: #f8fafc;
+  cursor: pointer;
+  color: var(--text-main);
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.input-group input[type="file"]:hover {
+  border-color: var(--primary);
+  background-color: #f1f5f9;
+}
+
+.input-group input[type="file"]:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+/* ==========================================================================
+   CHECKBOXES & TERMOS
+   ========================================================================== */
+.checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.checkbox-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 14px;
+  color: #495057;
+  cursor: pointer;
+  user-select: none;
+}
+
+.checkbox-item input[type="checkbox"] {
+  margin-top: 3px;
+  width: 18px;
+  height: 18px;
+  accent-color: var(--primary);
+  cursor: pointer;
+}
+
+/* ==========================================================================
+   BOTÃO DE SUBMIT
+   ========================================================================== */
+.btn-submit {
+  width: 100%;
+  padding: 14px 0;
+  background-color: var(--primary);
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.btn-submit:hover {
+  background-color: var(--primary-hover);
+}
+
+.btn-submit:active {
+  transform: scale(0.99);
+}
+
+/* ==========================================================================
+   RESPONSIVIDADE (MOBILE)
+   ========================================================================== */
+@media (max-width: 600px) {
+  body {
+    padding: 16px 10px;
+  }
+
+  .form-card {
+    padding: 24px 18px;
+    border-radius: 10px;
+  }
+
+  .grid-2 {
+    grid-template-columns: 1fr;
+  }
+
+  .form-header h1 {
+    font-size: 22px;
+  }
+
+  .form-section {
+    padding: 16px 14px 18px;
+    margin-bottom: 18px;
+  }
+
+  .form-section legend {
+    font-size: 15px;
+  }
+}
