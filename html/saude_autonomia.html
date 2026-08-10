@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Saúde e Autonomia — APAN</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/saude_autonomia.css">
+
+  <!-- Script Supabase CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+  <main class="page-wrapper">
+    <div class="form-card">
+
+      <!-- Botão de Voltar -->
+      <a href="../index.html" class="btn-voltar">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        Voltar para o Início
+      </a>
+
+      <header class="form-header">
+        <h1>Saúde e Autonomia</h1>
+        <p class="subtitle">Informações sobre deficiência, saúde e independência do atleta</p>
+      </header>
+
+      <form class="unified-form" id="form-saude" action="#" method="POST">
+
+        <!-- ========== ÁREA DE BUSCA DE CPF ========== -->
+        <div id="area-busca">
+          <div class="form-group">
+            <label for="cpf-consulta">CPF do Atleta *</label>
+            <input 
+              type="text" 
+              id="cpf-consulta" 
+              placeholder="000.000.000-00" 
+              maxlength="14"
+              required
+            >
+          </div>
+          <button type="button" id="btn-buscar" class="btn-principal">
+            🔍 Buscar Atleta
+          </button>
+          <div id="resultado-busca" style="margin-top: 14px; display: none;"></div>
+        </div>
+
+        <!-- ========== DADOS DE SAÚDE E AUTONOMIA ========== -->
+
+        <!-- Tipo de Deficiência -->
+        <fieldset class="form-section">
+          <legend>🩺 Deficiência</legend>
+
+          <div class="grid-2">
+            <!-- Tipo de Deficiência -->
+            <div class="input-group">
+              <label for="tipo_deficiencia">Tipo de Deficiência *</label>
+              <select id="tipo_deficiencia" name="tipo_deficiencia" required>
+                <option value="">Selecione...</option>
+                <option value="Física">Física</option>
+                <option value="Visual">Visual</option>
+                <option value="Auditiva">Auditiva</option>
+                <option value="Intelectual">Intelectual</option>
+                <option value="Autismo">Autismo</option>
+                <option value="Síndrome de Down">Síndrome de Down</option>
+                <option value="TEA">TEA</option>
+                <option value="Múltipla">Múltipla</option>
+                <option value="Nenhuma">Nenhuma</option>
+              </select>
+            </div>
+
+            <!-- CID -->
+            <div class="input-group">
+              <label for="cid_deficiencia">CID da Deficiência</label>
+              <input type="text" id="cid_deficiencia" name="cid_deficiencia" placeholder="Ex: H54.0, F84.0" maxlength="10">
+            </div>
+
+            <!-- Natureza da Deficiência -->
+            <div class="input-group">
+              <label for="natureza_deficiencia">Natureza da Deficiência *</label>
+              <select id="natureza_deficiencia" name="natureza_deficiencia" required>
+                <option value="">Selecione...</option>
+                <option value="Congênita">Congênita</option>
+                <option value="Adquirida">Adquirida</option>
+              </select>
+            </div>
+
+            <!-- Causa (exibido se Adquirida) -->
+            <div class="input-group conditional-field" id="campo-causa">
+              <label for="causa_deficiencia">Causa Específica (se adquirida)</label>
+              <input type="text" id="causa_deficiencia" name="causa_deficiencia" placeholder="Ex: Acidente, doença, etc.">
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- Medicamentos e Alergias -->
+        <fieldset class="form-section">
+          <legend>💊 Medicamentos e Alergias</legend>
+
+          <div class="grid-2">
+            <!-- Usa Medicamento? -->
+            <div class="input-group">
+              <label class="group-title">Usa medicamento continuamente?</label>
+              <div class="radio-options horizontal">
+                <label class="radio-card">
+                  <input type="radio" name="usa_medicamento" value="sim">
+                  <span>Sim</span>
+                </label>
+                <label class="radio-card">
+                  <input type="radio" name="usa_medicamento" value="nao" checked>
+                  <span>Não</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Detalhes Medicamentos (exibido se Sim) -->
+            <div class="input-group conditional-field full-width" id="campo-medicamento">
+              <label for="detalhes_medicamento_horarios">Medicamentos e Horários</label>
+              <textarea 
+                id="detalhes_medicamento_horarios" 
+                name="detalhes_medicamento_horarios" 
+                rows="2"
+                placeholder="Ex: Risperidona 1mg - 8h e 20h; Dipirona - 12h"
+              ></textarea>
+            </div>
+
+            <!-- Alergias -->
+            <div class="input-group full-width">
+              <label for="possui_alergias">Possui alergias?</label>
+              <input type="text" id="possui_alergias" name="possui_alergias" placeholder="Ex: Penicilina, poeira, lactose...">
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- Comunicação -->
+        <fieldset class="form-section">
+          <legend>🗣️ Comunicação</legend>
+
+          <div class="grid-2">
+            <!-- Dificuldade de Fala -->
+            <div class="input-group">
+              <label class="group-title">Possui dificuldade de fala?</label>
+              <div class="radio-options horizontal">
+                <label class="radio-card">
+                  <input type="radio" name="possui_dificuldade_fala" value="sim">
+                  <span>Sim</span>
+                </label>
+                <label class="radio-card">
+                  <input type="radio" name="possui_dificuldade_fala" value="nao" checked>
+                  <span>Não</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Mecanismo de Comunicação -->
+            <div class="input-group">
+              <label for="mecanismo_comunicacao">Mecanismo de Comunicação</label>
+              <select id="mecanismo_comunicacao" name="mecanismo_comunicacao">
+                <option value="">Selecione...</option>
+                <option value="Verbal">Verbal</option>
+                <option value="Libras">Libras</option>
+                <option value="Prancha (PECS)">Prancha (PECS)</option>
+                <option value="Comunicação Aumentativa (AAC)">Comunicação Aumentativa (AAC)</option>
+                <option value="Outro">Outro</option>
+              </select>
+            </div>
+
+            <!-- Nível de Compreensão -->
+            <div class="input-group">
+              <label for="nivel_compreensao">Nível de Compreensão</label>
+              <select id="nivel_compreensao" name="nivel_compreensao">
+                <option value="">Selecione...</option>
+                <option value="Excelente">Excelente</option>
+                <option value="Bom">Bom</option>
+                <option value="Moderado">Moderado</option>
+                <option value="Limitado">Limitado</option>
+              </select>
+            </div>
+
+            <!-- Interação Social -->
+            <div class="input-group">
+              <label for="interacao_social">Interação Social</label>
+              <select id="interacao_social" name="interacao_social">
+                <option value="">Selecione...</option>
+                <option value="Interage bem com todos">Interage bem com todos</option>
+                <option value="Interage pouco">Interage pouco</option>
+                <option value="Interage em pequenos grupos">Interage em pequenos grupos</option>
+                <option value="Precisa ser incluído">Precisa ser incluído</option>
+                <option value="Isolado">Isolado</option>
+              </select>
+            </div>
+
+            <!-- Capacidade de Transmitir Recados -->
+            <div class="input-group">
+              <label class="group-title">Capacidade de transmitir recados?</label>
+              <div class="radio-options horizontal">
+                <label class="radio-card">
+                  <input type="radio" name="capacidade_transmitir_recados" value="sim">
+                  <span>Sim</span>
+                </label>
+                <label class="radio-card">
+                  <input type="radio" name="capacidade_transmitir_recados" value="nao" checked>
+                  <span>Não</span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- Dispositivos e Autonomia -->
+        <fieldset class="form-section">
+          <legend>📱 Dispositivos e Autonomia</legend>
+
+          <div class="grid-2">
+            <!-- Dispositivos Tecnológicos -->
+            <div class="input-group full-width">
+              <label for="dispositivos_tecnologicos">Dispositivos Tecnológicos que utiliza</label>
+              <select id="dispositivos_tecnologicos" name="dispositivos_tecnologicos" multiple style="height: auto; min-height: 60px;">
+                <option value="Celular">Celular</option>
+                <option value="Tablet">Tablet</option>
+                <option value="Computador">Computador</option>
+                <option value="Leitor de tela">Leitor de tela</option>
+                <option value="Nenhum">Nenhum</option>
+                <option value="Outro">Outro</option>
+              </select>
+              <small class="help-text">Segure Ctrl (Cmd no Mac) para selecionar múltiplos.</small>
+            </div>
+
+            <!-- Autonomia Mobilidade -->
+            <div class="input-group full-width">
+              <label class="group-title">Autonomia para se deslocar sozinho(a)?</label>
+              <div class="radio-options horizontal">
+                <label class="radio-card">
+                  <input type="radio" name="autonomia_mobilidade" value="Independente">
+                  <span>Independente</span>
+                </label>
+                <label class="radio-card">
+                  <input type="radio" name="autonomia_mobilidade" value="Auxílio parcial">
+                  <span>Auxílio parcial</span>
+                </label>
+                <label class="radio-card">
+                  <input type="radio" name="autonomia_mobilidade" value="Auxílio total">
+                  <span>Auxílio total</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Suportes de Locomoção -->
+            <div class="input-group full-width">
+              <label for="suportes_locomocao">Suportes de Locomoção</label>
+              <select id="suportes_locomocao" name="suportes_locomocao" multiple style="height: auto; min-height: 60px;">
+                <option value="Nenhum">Nenhum</option>
+                <option value="Bengala">Bengala</option>
+                <option value="Andador">Andador</option>
+                <option value="Cadeira de rodas">Cadeira de rodas</option>
+                <option value="Órtese">Órtese</option>
+                <option value="Prótese">Prótese</option>
+                <option value="Cão guia">Cão guia</option>
+                <option value="Outro">Outro</option>
+              </select>
+              <small class="help-text">Segure Ctrl (Cmd no Mac) para selecionar múltiplos.</small>
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- Autonomia Pessoal -->
+        <fieldset class="form-section">
+          <legend>🧼 Autonomia Pessoal</legend>
+
+          <div class="grid-2">
+            <!-- Autonomia Higiene -->
+            <div class="input-group">
+              <label for="autonomia_higiene">Autonomia para Higiene Corporal</label>
+              <select id="autonomia_higiene" name="autonomia_higiene">
+                <option value="">Selecione...</option>
+                <option value="Independente">Independente</option>
+                <option value="Auxílio parcial">Auxílio parcial</option>
+                <option value="Auxílio total">Auxílio total</option>
+              </select>
+              <small class="help-text">Banho, troca de roupa, higiene menstrual, etc.</small>
+            </div>
+
+            <!-- Autonomia Alimentação -->
+            <div class="input-group">
+              <label for="autonomia_alimentacao">Autonomia para Alimentação</label>
+              <select id="autonomia_alimentacao" name="autonomia_alimentacao">
+                <option value="">Selecione...</option>
+                <option value="Independente">Independente</option>
+                <option value="Auxílio parcial">Auxílio parcial</option>
+                <option value="Auxílio total">Auxílio total</option>
+              </select>
+            </div>
+
+            <!-- Restrição Alimentar -->
+            <div class="input-group full-width">
+              <label for="restricao_alimentar">Restrição Alimentar</label>
+              <input type="text" id="restricao_alimentar" name="restricao_alimentar" placeholder="Ex: Glúten, lactose, dieta específica...">
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- Tipo Sanguíneo -->
+        <fieldset class="form-section">
+          <legend>🩸 Tipo Sanguíneo</legend>
+          <div class="grid-2">
+            <div class="input-group">
+              <label for="tipo_sanguineo">Tipo Sanguíneo</label>
+              <select id="tipo_sanguineo" name="tipo_sanguineo">
+                <option value="">Selecione...</option>
+                <option value="A+">A+</option>
+                <option value="A-">A-</option>
+                <option value="B+">B+</option>
+                <option value="B-">B-</option>
+                <option value="AB+">AB+</option>
+                <option value="AB-">AB-</option>
+                <option value="O+">O+</option>
+                <option value="O-">O-</option>
+                <option value="Não sei">Não sei</option>
+              </select>
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- Botão Enviar -->
+        <button type="submit" class="btn-submit">Salvar Informações de Saúde</button>
+        <div id="submit-status" class="status-msg" style="margin-top: 16px; text-align: center; display: none;"></div>
+
+      </form>
+    </div>
+  </main>
+
+  <script src="/js/saude_autonomia.js"></script>
+</body>
+</html>
