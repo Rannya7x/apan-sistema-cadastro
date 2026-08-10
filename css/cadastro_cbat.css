@@ -183,6 +183,11 @@ body {
   letter-spacing: -0.2px;
 }
 
+/*TAMANHO UNIFORMES*/
+
+.input-group>select{
+  padding: 8px 5px  ;
+}
 /* ==========================================================================
    GRID E INPUTS DE ARQUIVO
    ========================================================================== */
@@ -216,7 +221,7 @@ body {
 
 .input-group input[type="file"] {
   font-size: 13.5px;
-  padding: 10px 12px;
+  padding: 10px 5px;
   border: 1px dashed var(--border-color);
   border-radius: 10px;
   background-color: #f8fafc;
@@ -236,6 +241,8 @@ body {
   border-color: var(--primary);
   box-shadow: 0 0 0 3px var(--focus-ring);
 }
+
+
 
 /* ==========================================================================
    CHECKBOXES & TERMOS
