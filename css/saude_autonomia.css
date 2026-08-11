@@ -188,6 +188,14 @@
    .input-group>select{
      padding: 8px 5px  ;
    }
+
+   .input-group>input{
+     padding: 8px 5px ;
+  }
+
+  .input-group>textarea{
+    padding: 8px 5px ;
+ }
    /* ==========================================================================
       GRID E INPUTS DE ARQUIVO
       ========================================================================== */
