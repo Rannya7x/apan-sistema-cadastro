@@ -23,8 +23,15 @@ function formatarData(dataIso) {
   return dataIso;
 }
 
+// Helper para formatar valores booleanos (Sim/Não)
+function formatarSimNao(valor) {
+  if (valor === true || valor === 'sim' || valor === 'Sim') return 'Sim';
+  if (valor === false || valor === 'nao' || valor === 'Não') return 'Não';
+  return valor || 'Não informado';
+}
+
 // ============================================
-// CARREGAR TODOS OS ATLETAS (com joins)
+// CARREGAR TODOS OS ATLETAS (com joins atualizados)
 // ============================================
 async function carregarTodosAtletas() {
   const areaResultados = document.getElementById('area-resultados');
@@ -43,7 +50,8 @@ async function carregarTodosAtletas() {
       .select(`
         *,
         socioeconomico (*),
-        documentos_atletas (*)
+        documentos_atletas (*),
+        saude_autonomia (*)
       `)
       .order('nome_completo');
 
@@ -123,10 +131,8 @@ function exibirMensagemNaoEncontrado(cpf) {
 // INICIALIZAÇÃO E EVENTOS
 // ============================================
 document.addEventListener('DOMContentLoaded', () => {
-  // Carrega os dados
   carregarTodosAtletas();
 
-  // Máscara de CPF no campo de busca
   const inputCpf = document.getElementById('cpf-consulta');
   if (inputCpf) {
     inputCpf.addEventListener('input', (e) => {
@@ -213,6 +219,8 @@ function exibirDetalhesAtleta(atleta) {
   
   const socio = atleta.socioeconomico || {};
   const doc = atleta.documentos_atletas || {};
+  const saude = atleta.saude_autonomia || {}; // Tratamento para a nova tabela de saúde
+
   const fotoPerfilUrl = (doc.foto_url || atleta.foto_url || '').trim();
   const fotoPerfil = fotoPerfilUrl || AVATAR_PADRAO;
 
@@ -241,13 +249,36 @@ function exibirDetalhesAtleta(atleta) {
           <div><strong>E-mail:</strong> ${atleta.email || 'Não informado'}</div>
           <div><strong>WhatsApp:</strong> ${atleta.whatsapp || 'Não informado'}</div>
           <div><strong>Nome do Responsável:</strong> ${atleta.nome_responsavel || 'Não necessário'}</div>
-          <div><strong>Possui Deficiência:</strong> ${atleta.possui_deficiencia === 'sim' ? 'Sim' : 'Não'}</div>
-          <div><strong>Tipo de Deficiência:</strong> ${atleta.tipo_deficiencia || 'Nenhum'}</div>
-          <div><strong>Possui Equipamentos:</strong> ${atleta.possui_equipamentos === 'sim' ? (atleta.qual_equipamento || 'Sim') : 'Não'}</div>
         </div>
       </section>
 
-      <!-- SEÇÃO 2: FICHA SOCIOECONÔMICA (COMPLETA) -->
+      <!-- SEÇÃO 2: SAÚDE E AUTONOMIA (NOVA SEÇÃO) -->
+      <section style="margin-bottom:24px;">
+        <h3 style="color:#1a73e8; font-size:16px; border-bottom:2px solid #e7f3ff; padding-bottom:6px; margin-bottom:12px;">🩺 Saúde e Autonomia</h3>
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:12px; font-size:14px;">
+          <div><strong>Tipo de Deficiência:</strong> ${saude.tipo_deficiencia || 'Não informado'}</div>
+          <div><strong>CID:</strong> ${saude.cid_deficiencia || 'Não informado'}</div>
+          <div><strong>Natureza:</strong> ${saude.natureza_deficiencia || 'Não informada'}</div>
+          <div><strong>Causa Específica:</strong> ${saude.causa_deficiencia || 'Não aplicável'}</div>
+          <div><strong>Usa Medicamento Contínuo:</strong> ${formatarSimNao(saude.usa_medicamento)}</div>
+          <div style="grid-column: 1 / -1;"><strong>Detalhes dos Medicamentos/Horários:</strong> ${saude.detalhes_medicamento_horarios || 'Nenhum informado'}</div>
+          <div style="grid-column: 1 / -1;"><strong>Possui Alergias:</strong> ${saude.possui_alergias || 'Nenhuma informada'}</div>
+          <div><strong>Dificuldade de Fala:</strong> ${formatarSimNao(saude.possui_dificuldade_fala)}</div>
+          <div><strong>Mecanismo de Comunicação:</strong> ${saude.mecanismo_comunicacao || 'Não informado'}</div>
+          <div><strong>Nível de Compreensão:</strong> ${saude.nivel_compreensao || 'Não informado'}</div>
+          <div><strong>Interação Social:</strong> ${saude.interacao_social || 'Não informada'}</div>
+          <div><strong>Capacidade de Recados:</strong> ${formatarSimNao(saude.capacidade_transmitir_recados)}</div>
+          <div style="grid-column: 1 / -1;"><strong>Dispositivos Tecnológicos:</strong> ${saude.dispositivos_tecnologicos || 'Nenhum'}</div>
+          <div><strong>Autonomia de Mobilidade:</strong> ${saude.autonomia_mobilidade || 'Não informada'}</div>
+          <div style="grid-column: 1 / -1;"><strong>Suportes de Locomoção:</strong> ${saude.suportes_locomocao || 'Nenhum'}</div>
+          <div><strong>Autonomia para Higiene:</strong> ${saude.autonomia_higiene || 'Não informada'}</div>
+          <div><strong>Autonomia para Alimentação:</strong> ${saude.autonomia_alimentacao || 'Não informada'}</div>
+          <div style="grid-column: 1 / -1;"><strong>Restrição Alimentar:</strong> ${saude.restricao_alimentar || 'Nenhuma'}</div>
+          <div><strong>Tipo Sanguíneo:</strong> ${saude.tipo_sanguineo || 'Não informado'}</div>
+        </div>
+      </section>
+
+      <!-- SEÇÃO 3: FICHA SOCIOECONÔMICA (COMPLETA) -->
       <section style="margin-bottom:24px;">
         <h3 style="color:#1a73e8; font-size:16px; border-bottom:2px solid #e7f3ff; padding-bottom:6px; margin-bottom:12px;">🏠 Ficha Socioeconômica</h3>
         <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:12px; font-size:14px;">
@@ -273,7 +304,7 @@ function exibirDetalhesAtleta(atleta) {
         </div>
       </section>
 
-      <!-- SEÇÃO 3: DOCUMENTAÇÃO E TERMOS -->
+      <!-- SEÇÃO 4: DOCUMENTAÇÃO E TERMOS -->
       <section>
         <h3 style="color:#1a73e8; font-size:16px; border-bottom:2px solid #e7f3ff; padding-bottom:6px; margin-bottom:12px;">📁 Anexos e Termos Aceitos</h3>
         

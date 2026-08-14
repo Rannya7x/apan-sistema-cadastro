@@ -13,19 +13,50 @@ document.addEventListener("DOMContentLoaded", function () {
   var btnBuscar = document.getElementById("btn-buscar");
   var divResultadoBusca = document.getElementById("resultado-busca");
 
-  var form = document.getElementById("form-uniforme");
+  var form = document.getElementById("form-saude");
   var btnSubmit = form ? form.querySelector(".btn-submit") : null;
   var submitStatus = document.getElementById("submit-status");
 
-  // Campos do uniforme
-  var selectCamiseta = document.getElementById("tamanho_camiseta");
-  var selectShort = document.getElementById("tamanho_short");
-  var selectTenis = document.getElementById("tamanho_tenis");
-  var selectSapatilha = document.getElementById("tamanho_sapatilha");
-  var textareaObservacao = document.getElementById("observacao_uniforme");
+  // Elementos condicionais da tela
+  var selectNatureza = document.getElementById("natureza_deficiencia");
+  var campoCausa = document.getElementById("campo-causa");
+  var campoMedicamento = document.getElementById("campo-medicamento");
 
   // Armazena o ID do atleta encontrado
   var atletaEncontradoId = null;
+
+  // =============================================================
+  // 0. COMPORTAMENTOS CONDICIONAIS (EXIBIÇÃO DE CAMPOS)
+  // =============================================================
+  if (selectNatureza) {
+    selectNatureza.addEventListener("change", function () {
+      if (this.value === "Adquirida") {
+        if (campoCausa) campoCausa.style.display = "block";
+      } else {
+        if (campoCausa) {
+          campoCausa.style.display = "none";
+          var inputCausa = document.getElementById("causa_deficiencia");
+          if (inputCausa) inputCausa.value = "";
+        }
+      }
+    });
+  }
+
+  // Monitorar rádio de medicamento (Sim/Não)
+  var radiosUsaMedicamento = document.querySelectorAll("input[name='usa_medicamento']");
+  radiosUsaMedicamento.forEach(function (radio) {
+    radio.addEventListener("change", function () {
+      if (this.value === "sim") {
+        if (campoMedicamento) campoMedicamento.style.display = "block";
+      } else {
+        if (campoMedicamento) {
+          campoMedicamento.style.display = "none";
+          var txtMed = document.getElementById("detalhes_medicamento_horarios");
+          if (txtMed) txtMed.value = "";
+        }
+      }
+    });
+  });
 
   // =============================================================
   // 1. MÁSCARA DO CPF
@@ -40,7 +71,7 @@ document.addEventListener("DOMContentLoaded", function () {
       e.target.value = value;
 
       if (value.length < 14 && atletaEncontradoId) {
-        limparFormularioUniforme();
+        limparFormularioSaude();
         if (divResultadoBusca) divResultadoBusca.style.display = "none";
       }
     });
@@ -49,13 +80,16 @@ document.addEventListener("DOMContentLoaded", function () {
   // =============================================================
   // FUNÇÃO PARA LIMPAR FORMULÁRIO E RESETAR ESTADOS
   // =============================================================
-  function limparFormularioUniforme() {
+  function limparFormularioSaude() {
     var cpfDigitado = inputCpfConsulta ? inputCpfConsulta.value : "";
     
     if (form) form.reset();
     if (inputCpfConsulta) inputCpfConsulta.value = cpfDigitado;
     
     atletaEncontradoId = null;
+
+    if (campoCausa) campoCausa.style.display = "none";
+    if (campoMedicamento) campoMedicamento.style.display = "none";
 
     if (submitStatus) {
       submitStatus.style.display = "none";
@@ -72,11 +106,11 @@ document.addEventListener("DOMContentLoaded", function () {
     if (cpfLimpo.length !== 11) {
       divResultadoBusca.style.display = "block";
       divResultadoBusca.innerHTML = '<div style="background: #f8d7da; border: 1px solid #f5c2c7; color: #842029; padding: 12px; border-radius: 10px; font-size: 14px;">Por favor, digite um CPF válido com 11 dígitos.</div>';
-      limparFormularioUniforme();
+      limparFormularioSaude();
       return;
     }
 
-    limparFormularioUniforme();
+    limparFormularioSaude();
 
     btnBuscar.disabled = true;
     btnBuscar.innerText = "🔍 Buscando...";
@@ -98,28 +132,56 @@ document.addEventListener("DOMContentLoaded", function () {
       if (atleta) {
         atletaEncontradoId = atleta.id;
 
-        // 2. Consulta tabela 'uniformes_atletas'
-        var uniformeResp = await supabaseClient
-          .from("uniformes_atletas")
+        // 2. Consulta tabela 'saude_autonomia'
+        var saudeResp = await supabaseClient
+          .from("saude_autonomia")
           .select("*")
           .eq("atleta_id", atleta.id)
           .maybeSingle();
 
-        var uniforme = uniformeResp.data;
+        var saude = saudeResp.data;
 
-        if (uniforme) {
-          // Preenche os campos com os dados existentes
-          if (selectCamiseta) selectCamiseta.value = uniforme.tamanho_camiseta || "";
-          if (selectShort) selectShort.value = uniforme.tamanho_short || "";
-          if (selectTenis) selectTenis.value = uniforme.tamanho_tenis || "";
-          if (selectSapatilha) selectSapatilha.value = uniforme.tamanho_sapatilha || "";
-          if (textareaObservacao) textareaObservacao.value = uniforme.observacao || "";
+        if (saude) {
+          // Preenche campos comuns de texto e select
+          atribuirValor("tipo_deficiencia", saude.tipo_deficiencia);
+          atribuirValor("cid_deficiencia", saude.cid_deficiencia);
+          atribuirValor("natureza_deficiencia", saude.natureza_deficiencia);
+          atribuirValor("causa_deficiencia", saude.causa_deficiencia);
+          atribuirValor("detalhes_medicamento_horarios", saude.detalhes_medicamento_horarios);
+          atribuirValor("possui_alergias", saude.possui_alergias);
+          atribuirValor("mecanismo_comunicacao", saude.mecanismo_comunicacao);
+          atribuirValor("nivel_compreensao", saude.nivel_compreensao);
+          atribuirValor("interacao_social", saude.interacao_social);
+          atribuirValor("capacidade_transmitir_recados", saude.capacidade_transmitir_recados);
+          atribuirValor("autonomia_higiene", saude.autonomia_higiene);
+          atribuirValor("autonomia_alimentacao", saude.autonomia_alimentacao);
+          atribuirValor("restricao_alimentar", saude.restricao_alimentar);
+          atribuirValor("tipo_sanguineo", saude.tipo_sanguineo);
+
+          // Campos Booleanos (Radios Sim/Não)
+          marcarRadio("usa_medicamento", saude.usa_medicamento);
+          marcarRadio("possui_dificuldade_fala", saude.possui_dificuldade_fala);
+
+          // Autonomia Mobilidade (Radio Group)
+          marcarRadio("autonomia_mobilidade", saude.autonomia_mobilidade);
+
+          // Selects Múltiplos (Dispositivos / Suportes)
+          selecionarMultiplos("dispositivos_tecnologicos", saude.dispositivos_tecnologicos);
+          selecionarMultiplos("suportes_locomocao", saude.suportes_locomocao);
+
+          // Ajusta visibilidade condicional baseada nos dados salvos
+          if (saude.natureza_deficiencia === "Adquirida" && campoCausa) {
+            campoCausa.style.display = "block";
+          }
+          if (saude.usa_medicamento === true && campoMedicamento) {
+            campoMedicamento.style.display = "block";
+          }
 
           divResultadoBusca.innerHTML = 
             '<div style="background: #e7f3ff; border: 1px solid #c5d5ea; color: #0c4a6e; padding: 12px; border-radius: 10px; font-size: 14.5px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">' +
               '<div>' +
                 '<strong>✓ Atleta Encontrado:</strong> ' + atleta.nome_completo + ' <br>' +
-                '<small style="color: #0369a1;">Tamanhos já cadastrados carregados para consulta/atualização.</small>' +
+                '<small style="color: #0369a1;">Dados de saúde já cadastrados carregados para atualização.</small>' +
               '</div>' +
               '<button type="button" id="btn-limpar-busca" style="background: #bae6fd; border: none; color: #0369a1; padding: 6px 12px; border-radius: 6px; font-weight: 600; font-size: 12px; cursor: pointer;">Limpar / Outro CPF</button>' +
             '</div>';
@@ -129,7 +191,7 @@ document.addEventListener("DOMContentLoaded", function () {
             '<div style="background: #e7f3ff; border: 1px solid #c5d5ea; color: #0c4a6e; padding: 12px; border-radius: 10px; font-size: 14.5px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">' +
               '<div>' +
                 '<strong>✓ Atleta Encontrado:</strong> ' + atleta.nome_completo + ' <br>' +
-                '<small style="color: #0369a1;">Nenhum tamanho de uniforme cadastrado. Preencha abaixo.</small>' +
+                '<small style="color: #0369a1;">Nenhum registro de saúde cadastrado. Preencha abaixo.</small>' +
               '</div>' +
               '<button type="button" id="btn-limpar-busca" style="background: #bae6fd; border: none; color: #0369a1; padding: 6px 12px; border-radius: 6px; font-weight: 600; font-size: 12px; cursor: pointer;">Limpar / Outro CPF</button>' +
             '</div>';
@@ -139,13 +201,13 @@ document.addEventListener("DOMContentLoaded", function () {
         if (btnLimparBusca) {
           btnLimparBusca.addEventListener("click", function () {
             if (inputCpfConsulta) inputCpfConsulta.value = "";
-            limparFormularioUniforme();
+            limparFormularioSaude();
             divResultadoBusca.style.display = "none";
           });
         }
 
       } else {
-        limparFormularioUniforme();
+        limparFormularioSaude();
         divResultadoBusca.innerHTML = 
           '<div style="background: #fff5f5; border: 1px solid #fcc; color: #c92a2a; padding: 14px; border-radius: 10px; font-size: 14px; text-align: center;">' +
             '<p style="margin-bottom: 8px;"><strong>⚠️ Atleta não encontrado.</strong> Verifique se digitou o CPF corretamente.</p>' +
@@ -158,7 +220,7 @@ document.addEventListener("DOMContentLoaded", function () {
     } catch (err) {
       console.error("Erro ao buscar atleta:", err);
       divResultadoBusca.innerHTML = '<div style="background: #f8d7da; border: 1px solid #f5c2c7; color: #842029; padding: 12px; border-radius: 10px; font-size: 14px;">Erro ao realizar a busca. Tente novamente.</div>';
-      limparFormularioUniforme();
+      limparFormularioSaude();
     } finally {
       btnBuscar.disabled = false;
       btnBuscar.innerText = "🔍 Buscar Atleta";
@@ -167,6 +229,62 @@ document.addEventListener("DOMContentLoaded", function () {
 
   if (btnBuscar) {
     btnBuscar.addEventListener("click", buscarAtleta);
+  }
+
+  // =============================================================
+  // FUNÇÕES AUXILIARES DE PREENCHIMENTO
+  // =============================================================
+  function atribuirValor(id, valor) {
+    var el = document.getElementById(id);
+    if (el && valor !== null && valor !== undefined) {
+      el.value = valor;
+    }
+  }
+
+  function marcarRadio(nomeGrupo, valor) {
+    if (valor === null || valor === undefined) return;
+    var valorStr = String(valor).toLowerCase();
+    // Ajusta para booleanos convertidos em texto "true"/"false" se vierem do banco
+    if (valorStr === "true") valorStr = "sim";
+    if (valorStr === "false") valorStr = "nao";
+
+    var radios = document.querySelectorAll("input[name='" + nomeGrupo + "']");
+    radios.forEach(function (r) {
+      if (r.value.toLowerCase() === valorStr) {
+        r.checked = true;
+      }
+    });
+  }
+
+  function selecionarMultiplos(idSelect, valoresSalvos) {
+    var selectEl = document.getElementById(idSelect);
+    if (!selectEl || !valoresSalvos) return;
+    
+    // Suporta se salvo como string separada por vírgula ou texto simples
+    var lista = typeof valoresSalvos === "string" ? valoresSalvos.split(",").map(function(s){ return s.trim(); }) : [valoresSalvos];
+
+    for (var i = 0; i < selectEl.options.length; i++) {
+      if (lista.includes(selectEl.options[i].value)) {
+        selectEl.options[i].selected = true;
+      }
+    }
+  }
+
+  function obterValorRadio(nomeGrupo) {
+    var selecionado = document.querySelector("input[name='" + nomeGrupo + "']:checked");
+    return selecionado ? selecionado.value : null;
+  }
+
+  function obterValoresMultiplos(idSelect) {
+    var selectEl = document.getElementById(idSelect);
+    if (!selectEl) return null;
+    var selecionados = [];
+    for (var i = 0; i < selectEl.options.length; i++) {
+      if (selectEl.options[i].selected) {
+        selecionados.push(selectEl.options[i].value);
+      }
+    }
+    return selecionados.length > 0 ? selecionados.join(", ") : null;
   }
 
   // =============================================================
@@ -184,12 +302,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
       }
 
-      // Validação dos campos obrigatórios
-      if (!selectCamiseta.value || !selectShort.value || !selectTenis.value || !selectSapatilha.value) {
-        alert("Preencha todos os tamanhos obrigatórios.");
-        return;
-      }
-
       if (btnSubmit) {
         btnSubmit.disabled = true;
         btnSubmit.innerText = "Salvando dados...";
@@ -199,24 +311,44 @@ document.addEventListener("DOMContentLoaded", function () {
         submitStatus.style.display = "block";
         submitStatus.style.background = "#e2e3e5";
         submitStatus.style.color = "#383d41";
-        submitStatus.innerText = "Salvando tamanhos do uniforme...";
+        submitStatus.innerText = "Salvando informações de saúde...";
       }
 
       try {
-        // Monta os dados para a tabela 'uniformes_atletas'
-        var dadosUniforme = {
+        // Converte valores de radio Sim/Não para booleano conforme a tabela do Supabase
+        var usaMedStr = obterValorRadio("usa_medicamento");
+        var usaMedBool = usaMedStr === "sim" ? true : (usaMedStr === "nao" ? false : null);
+
+        var difFalaStr = obterValorRadio("possui_dificuldade_fala");
+        var difFalaBool = difFalaStr === "sim" ? true : (difFalaStr === "nao" ? false : null);
+
+        // Monta o objeto com exatidão baseada nas colunas da tabela 'saude_autonomia'
+        var dadosSaude = {
           atleta_id: atletaEncontradoId,
-          tamanho_camiseta: selectCamiseta.value,
-          tamanho_short: selectShort.value,
-          tamanho_tenis: selectTenis.value,
-          tamanho_sapatilha: selectSapatilha.value,
-          observacao: textareaObservacao?.value.trim() || null,
-          updated_at: new Date().toISOString()
+          tipo_deficiencia: document.getElementById("tipo_deficiencia")?.value || null,
+          cid_deficiencia: document.getElementById("cid_deficiencia")?.value.trim() || null,
+          natureza_deficiencia: document.getElementById("natureza_deficiencia")?.value || null,
+          causa_deficiencia: document.getElementById("causa_deficiencia")?.value.trim() || null,
+          usa_medicamento: usaMedBool,
+          detalhes_medicamento_horarios: document.getElementById("detalhes_medicamento_horarios")?.value.trim() || null,
+          possui_alergias: document.getElementById("possui_alergias")?.value.trim() || null,
+          possui_dificuldade_fala: difFalaBool,
+          mecanismo_comunicacao: document.getElementById("mecanismo_comunicacao")?.value || null,
+          nivel_compreensao: document.getElementById("nivel_compreensao")?.value || null,
+          interacao_social: document.getElementById("interacao_social")?.value || null,
+          capacidade_transmitir_recados: obterValorRadio("capacidade_transmitir_recados"),
+          dispositivos_tecnologicos: obterValoresMultiplos("dispositivos_tecnologicos"),
+          autonomia_mobilidade: obterValorRadio("autonomia_mobilidade"),
+          suportes_locomocao: obterValoresMultiplos("suportes_locomocao"),
+          autonomia_higiene: document.getElementById("autonomia_higiene")?.value || null,
+          autonomia_alimentacao: document.getElementById("autonomia_alimentacao")?.value || null,
+          restricao_alimentar: document.getElementById("restricao_alimentar")?.value.trim() || null,
+          tipo_sanguineo: document.getElementById("tipo_sanguineo")?.value || null
         };
 
         var response = await supabaseClient
-          .from("uniformes_atletas")
-          .upsert([dadosUniforme], { onConflict: 'atleta_id' });
+          .from("saude_autonomia")
+          .upsert([dadosSaude], { onConflict: 'atleta_id' });
 
         if (response.error) throw response.error;
 
@@ -224,18 +356,18 @@ document.addEventListener("DOMContentLoaded", function () {
           submitStatus.style.background = "#d1e7dd";
           submitStatus.style.color = "#0f5132";
           submitStatus.style.border = "1px solid #badbcc";
-          submitStatus.innerText = "✓ Tamanhos do uniforme salvos com sucesso!";
+          submitStatus.innerText = "✓ Informações de saúde salvas com sucesso!";
         }
 
-        alert("Tamanhos do uniforme salvos com sucesso!");
+        alert("Informações de saúde salvas com sucesso!");
 
         // Limpa a busca para permitir novo cadastro
         if (inputCpfConsulta) inputCpfConsulta.value = "";
-        limparFormularioUniforme();
-        divResultadoBusca.style.display = "none";
+        limparFormularioSaude();
+        if (divResultadoBusca) divResultadoBusca.style.display = "none";
 
       } catch (err) {
-        console.error("Erro ao salvar uniforme:", err);
+        console.error("Erro ao salvar saúde e autonomia:", err);
         if (submitStatus) {
           submitStatus.style.background = "#f8d7da";
           submitStatus.style.color = "#842029";
@@ -245,7 +377,7 @@ document.addEventListener("DOMContentLoaded", function () {
       } finally {
         if (btnSubmit) {
           btnSubmit.disabled = false;
-          btnSubmit.innerText = "Salvar Tamanhos do Uniforme";
+          btnSubmit.innerText = "Salvar Informações de Saúde";
         }
       }
     });
