@@ -1,40 +1,35 @@
-// =============================================================
-// CONFIGURAÇÃO DO SUPABASE
-// =============================================================
-const SUPABASE_URL = 'https://jaslvoxljchhhkompelu.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imphc2x2b3hsamNoaGhrb21wZWx1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE3NDY0MDAsImV4cCI6MjA5NzMyMjQwMH0.MoxG26k7LvtGm5hWvoA3YROXh6vJ3LARs9ndjF98hpc';
+import { supabase } from './src/lib/supabase.js';
+import { requireAthlete } from './src/lib/auth.js';
 
-const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-// Nome do bucket no Supabase Storage
 const BUCKET_NAME = 'documentos-atletas';
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener('DOMContentLoaded', async () => {
+  const context = await requireAthlete('../index.html');
+  if (!context) return;
 
-  // Elementos do DOM
-  var inputCpfConsulta = document.getElementById("cpf-consulta");
-  var btnBuscar = document.getElementById("btn-buscar");
-  var divResultadoBusca = document.getElementById("resultado-busca");
+  const { user, athlete } = context;
+  const atletaId = athlete.id;
+  const form = document.getElementById('form-cbat');
+  form?.reset();
+  const btnSubmit = form?.querySelector('.btn-submit');
+  const submitStatus = document.getElementById('submit-status');
+  const resultado = document.getElementById('resultado-busca');
 
-  var form = document.getElementById("form-cbat");
-  var btnSubmit = form ? form.querySelector(".btn-submit") : null;
-  var submitStatus = document.getElementById("submit-status");
+  const inputs = {
+    foto: document.getElementById('foto'),
+    rg: document.getElementById('doc-rg-cpf'),
+    comprovante: document.getElementById('comprovante-residencia'),
+    sus: document.getElementById('cartao-sus'),
+    laudo: document.getElementById('laudo-medico')
+  };
+  const termos = {
+    imagem: document.getElementById('termo_imagem'),
+    whatsapp: document.getElementById('termo_whatsapp'),
+    lgpd: document.getElementById('termo_lgpd')
+  };
 
-  // Inputs de arquivos
-  var inputFoto = document.getElementById("foto");
-  var inputDocRgCpf = document.getElementById("doc-rg-cpf");
-  var inputComprovante = document.getElementById("comprovante-residencia");
-  var inputCartaoSus = document.getElementById("cartao-sus");
-  var inputLaudoMedico = document.getElementById("laudo-medico");
-
-  // Checkboxes dos Termos
-  var checkTermoImagem = document.getElementById("termo_imagem");
-  var checkTermoWhatsapp = document.getElementById("termo_whatsapp");
-  var checkTermoLgpd = document.getElementById("termo_lgpd");
-
-  // Armazena o ID e URLs do atleta encontrado
-  var atletaEncontradoId = null;
-  var urlsExistentes = {
+  let documentoExistenteId = null;
+  let urls = {
     foto_url: null,
     rg_cpf_url: null,
     comprovante_residencia_url: null,
@@ -42,311 +37,113 @@ document.addEventListener("DOMContentLoaded", function () {
     laudo_medico_url: null
   };
 
-  // =============================================================
-  // 1. MÁSCARA DO CPF
-  // =============================================================
-  if (inputCpfConsulta) {
-    inputCpfConsulta.addEventListener("input", function (e) {
-      var value = e.target.value.replace(/\D/g, "");
-      if (value.length > 11) value = value.slice(0, 11);
-      value = value.replace(/(\d{3})(\d)/, "$1.$2");
-      value = value.replace(/(\d{3})(\d)/, "$1.$2");
-      value = value.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
-      e.target.value = value;
+  function preview(id, url, rotulo) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.innerHTML = url
+      ? `<span style="color:#0f5132">✓ Arquivo já enviado:</span> <a href="${url}" target="_blank" rel="noopener noreferrer">Ver ${rotulo}</a> <small>(envie outro para substituir)</small>`
+      : '';
+  }
 
-      if (value.length < 14 && atletaEncontradoId) {
-        limparFormularioDocumentos();
-        if (divResultadoBusca) divResultadoBusca.style.display = "none";
+  function status(texto, erro = false) {
+    if (!resultado) return;
+    resultado.style.display = 'block';
+    resultado.innerHTML = `<div style="padding:12px;border-radius:10px;border:1px solid ${erro ? '#fecaca' : '#bfdbfe'};background:${erro ? '#fff5f5' : '#eff6ff'};color:${erro ? '#991b1b' : '#1e3a8a'}">${texto}</div>`;
+  }
+
+  async function carregar() {
+    try {
+      const { data: docs, error } = await supabase
+        .from('documentos_atletas')
+        .select('*')
+        .eq('atleta_id', atletaId)
+        .maybeSingle();
+      if (error) throw error;
+
+      if (docs) {
+        documentoExistenteId = docs.id || null;
+        urls = {
+          foto_url: docs.foto_url || null,
+          rg_cpf_url: docs.rg_cpf_url || null,
+          comprovante_residencia_url: docs.comprovante_residencia_url || null,
+          cartao_sus_url: docs.cartao_sus_url || null,
+          laudo_medico_url: docs.laudo_medico_url || null
+        };
+        if (urls.foto_url && inputs.foto) inputs.foto.required = false;
+        if (urls.rg_cpf_url && inputs.rg) inputs.rg.required = false;
+        if (urls.comprovante_residencia_url && inputs.comprovante) inputs.comprovante.required = false;
+        if (termos.imagem) termos.imagem.checked = !!docs.termo_imagem;
+        if (termos.whatsapp) termos.whatsapp.checked = !!docs.termo_whatsapp;
+        if (termos.lgpd) termos.lgpd.checked = !!docs.termo_lgpd;
+        preview('preview-foto', urls.foto_url, 'Foto');
+        preview('preview-doc-rg-cpf', urls.rg_cpf_url, 'RG/CPF');
+        preview('preview-comprovante-residencia', urls.comprovante_residencia_url, 'Comprovante');
+        preview('preview-cartao-sus', urls.cartao_sus_url, 'Cartão SUS');
+        preview('preview-laudo-medico', urls.laudo_medico_url, 'Laudo');
+        status(`<strong>${athlete.nome_completo}</strong>, seus documentos já cadastrados foram carregados. Você pode substituí-los abaixo.`);
+      } else {
+        status(`<strong>${athlete.nome_completo}</strong>, este formulário já está vinculado automaticamente ao seu cadastro.`);
       }
-    });
+    } catch (error) {
+      console.error('Erro ao carregar documentos:', error);
+      status('Não foi possível carregar os documentos já cadastrados.', true);
+    }
   }
 
-  // =============================================================
-  // FUNÇÃO PARA LIMPAR FORMULÁRIO E RESETAR ESTADOS
-  // =============================================================
-  function limparFormularioDocumentos() {
-    var cpfDigitado = inputCpfConsulta ? inputCpfConsulta.value : "";
-    
-    if (form) form.reset();
-    if (inputCpfConsulta) inputCpfConsulta.value = cpfDigitado;
-    
-    atletaEncontradoId = null;
-    urlsExistentes = {
-      foto_url: null,
-      rg_cpf_url: null,
-      comprovante_residencia_url: null,
-      cartao_sus_url: null,
-      laudo_medico_url: null
-    };
+  async function upload(file, tipo) {
+    if (!file) return null;
+    const ext = file.name.split('.').pop()?.toLowerCase() || 'bin';
+    const path = `${user.id}/${tipo}_${Date.now()}.${ext}`;
+    const { error } = await supabase.storage.from(BUCKET_NAME).upload(path, file, { upsert: true });
+    if (error) throw error;
+    return supabase.storage.from(BUCKET_NAME).getPublicUrl(path).data.publicUrl;
+  }
 
-    // Restaura a obrigatoriedade original dos campos principais
-    if (inputFoto) inputFoto.required = true;
-    if (inputDocRgCpf) inputDocRgCpf.required = true;
-    if (inputComprovante) inputComprovante.required = true;
-
-    // Limpa previews de links
-    document.querySelectorAll(".file-preview").forEach(function (el) {
-      el.innerHTML = "";
-    });
-
+  form?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    btnSubmit.disabled = true;
+    btnSubmit.textContent = 'Enviando documentos...';
     if (submitStatus) {
-      submitStatus.style.display = "none";
-      submitStatus.innerHTML = "";
+      submitStatus.style.display = 'block';
+      submitStatus.textContent = 'Salvando informações...';
     }
-  }
-
-  // Helper para exibir link de documento já enviado
-  function exibirPreviewDocumento(idPreview, url, rotulo) {
-    var container = document.getElementById(idPreview);
-    if (!container) return;
-
-    if (url) {
-      container.innerHTML = 
-        '<span style="color: #0f5132;">✓ Arquivo já enviado: </span>' +
-        '<a href="' + url + '" target="_blank" rel="noopener noreferrer" style="color: #1a73e8; font-weight: 600; text-decoration: underline;">' +
-          'Ver ' + rotulo +
-        '</a> <small style="color: #6c757d;">(Envie outro arquivo se desejar substituir)</small>';
-    } else {
-      container.innerHTML = "";
-    }
-  }
-
-  // =============================================================
-  // 2. BUSCA DO ATLETA POR CPF
-  // =============================================================
-  async function buscarAtleta() {
-    var cpfLimpo = inputCpfConsulta.value.replace(/\D/g, "");
-
-    if (cpfLimpo.length !== 11) {
-      divResultadoBusca.style.display = "block";
-      divResultadoBusca.innerHTML = '<div style="background: #f8d7da; border: 1px solid #f5c2c7; color: #842029; padding: 12px; border-radius: 10px; font-size: 14px;">Por favor, digite um CPF válido com 11 dígitos.</div>';
-      limparFormularioDocumentos();
-      return;
-    }
-
-    limparFormularioDocumentos();
-
-    btnBuscar.disabled = true;
-    btnBuscar.innerText = "🔍 Buscando...";
-    divResultadoBusca.style.display = "block";
-    divResultadoBusca.innerHTML = '<div style="color: #6c757d; font-size: 14px;">Consultando sistema...</div>';
 
     try {
-      // 1. Busca Atleta na tabela 'atletas'
-      var response = await supabaseClient
-        .from("atletas")
-        .select("id, nome_completo")
-        .eq("cpf", cpfLimpo)
-        .maybeSingle();
+      const dados = {
+        atleta_id: atletaId,
+        foto_url: inputs.foto?.files[0] ? await upload(inputs.foto.files[0], 'foto') : urls.foto_url,
+        rg_cpf_url: inputs.rg?.files[0] ? await upload(inputs.rg.files[0], 'rg_cpf') : urls.rg_cpf_url,
+        comprovante_residencia_url: inputs.comprovante?.files[0] ? await upload(inputs.comprovante.files[0], 'comprovante') : urls.comprovante_residencia_url,
+        cartao_sus_url: inputs.sus?.files[0] ? await upload(inputs.sus.files[0], 'sus') : urls.cartao_sus_url,
+        laudo_medico_url: inputs.laudo?.files[0] ? await upload(inputs.laudo.files[0], 'laudo') : urls.laudo_medico_url,
+        termo_imagem: !!termos.imagem?.checked,
+        termo_whatsapp: !!termos.whatsapp?.checked,
+        termo_lgpd: !!termos.lgpd?.checked,
+        updated_at: new Date().toISOString()
+      };
 
-      if (response.error) throw response.error;
+      const resposta = documentoExistenteId
+        ? await supabase.from('documentos_atletas').update(dados).eq('id', documentoExistenteId).select().maybeSingle()
+        : await supabase.from('documentos_atletas').insert([dados]).select().maybeSingle();
 
-      var atleta = response.data;
+      if (resposta.error) throw resposta.error;
+      documentoExistenteId = resposta.data?.id || documentoExistenteId;
+      urls = { ...urls, ...dados };
 
-      if (atleta) {
-        atletaEncontradoId = atleta.id;
-
-        // 2. Consulta tabela 'documentos_atletas'
-        var docResp = await supabaseClient
-          .from("documentos_atletas")
-          .select("*")
-          .eq("atleta_id", atleta.id)
-          .maybeSingle();
-
-        var docs = docResp.data;
-
-        if (docs) {
-          urlsExistentes = {
-            foto_url: docs.foto_url,
-            rg_cpf_url: docs.rg_cpf_url,
-            comprovante_residencia_url: docs.comprovante_residencia_url,
-            cartao_sus_url: docs.cartao_sus_url,
-            laudo_medico_url: docs.laudo_medico_url
-          };
-
-          // Se o arquivo já foi enviado antes, ele não precisa ser obrigatório de novo
-          if (docs.foto_url && inputFoto) inputFoto.required = false;
-          if (docs.rg_cpf_url && inputDocRgCpf) inputDocRgCpf.required = false;
-          if (docs.comprovante_residencia_url && inputComprovante) inputComprovante.required = false;
-
-          // Exibe os links dos arquivos já enviados
-          exibirPreviewDocumento("preview-foto", docs.foto_url, "Foto");
-          exibirPreviewDocumento("preview-doc-rg-cpf", docs.rg_cpf_url, "Documento RG/CPF");
-          exibirPreviewDocumento("preview-comprovante-residencia", docs.comprovante_residencia_url, "Comprovante");
-          exibirPreviewDocumento("preview-cartao-sus", docs.cartao_sus_url, "Cartão SUS");
-          exibirPreviewDocumento("preview-laudo-medico", docs.laudo_medico_url, "Laudo Médico");
-
-          // Preenche os checkboxes dos termos
-          if (checkTermoImagem) checkTermoImagem.checked = !!docs.termo_imagem;
-          if (checkTermoWhatsapp) checkTermoWhatsapp.checked = !!docs.termo_whatsapp;
-          if (checkTermoLgpd) checkTermoLgpd.checked = !!docs.termo_lgpd;
-
-          divResultadoBusca.innerHTML = 
-            '<div style="background: #e7f3ff; border: 1px solid #c5d5ea; color: #0c4a6e; padding: 12px; border-radius: 10px; font-size: 14.5px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">' +
-              '<div>' +
-                '<strong>✓ Atleta Encontrado:</strong> ' + atleta.nome_completo + ' <br>' +
-                '<small style="color: #0369a1;">Documentos já cadastrados carregados para consulta/atualização.</small>' +
-              '</div>' +
-              '<button type="button" id="btn-limpar-busca" style="background: #bae6fd; border: none; color: #0369a1; padding: 6px 12px; border-radius: 6px; font-weight: 600; font-size: 12px; cursor: pointer;">Limpar / Outro CPF</button>' +
-            '</div>';
-
-        } else {
-          divResultadoBusca.innerHTML = 
-            '<div style="background: #e7f3ff; border: 1px solid #c5d5ea; color: #0c4a6e; padding: 12px; border-radius: 10px; font-size: 14.5px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">' +
-              '<div>' +
-                '<strong>✓ Atleta Encontrado:</strong> ' + atleta.nome_completo + ' <br>' +
-                '<small style="color: #0369a1;">Nenhum documento enviado anteriormente. Faça o upload abaixo.</small>' +
-              '</div>' +
-              '<button type="button" id="btn-limpar-busca" style="background: #bae6fd; border: none; color: #0369a1; padding: 6px 12px; border-radius: 6px; font-weight: 600; font-size: 12px; cursor: pointer;">Limpar / Outro CPF</button>' +
-            '</div>';
-        }
-
-        var btnLimparBusca = document.getElementById("btn-limpar-busca");
-        if (btnLimparBusca) {
-          btnLimparBusca.addEventListener("click", function () {
-            if (inputCpfConsulta) inputCpfConsulta.value = "";
-            limparFormularioDocumentos();
-            divResultadoBusca.style.display = "none";
-          });
-        }
-
-      } else {
-        limparFormularioDocumentos();
-        divResultadoBusca.innerHTML = 
-          '<div style="background: #fff5f5; border: 1px solid #fcc; color: #c92a2a; padding: 14px; border-radius: 10px; font-size: 14px; text-align: center;">' +
-            '<p style="margin-bottom: 8px;"><strong>⚠️ Atleta não encontrado.</strong> Verifique se digitou o CPF corretamente.</p>' +
-            '<a href="inscricao.html" style="display: inline-block; background: #1a73e8; color: white; padding: 8px 16px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 13px;">' +
-              'Ir para a Tela de Inscrição' +
-            '</a>' +
-          '</div>';
-      }
-
-    } catch (err) {
-      console.error("Erro ao buscar atleta:", err);
-      divResultadoBusca.innerHTML = '<div style="background: #f8d7da; border: 1px solid #f5c2c7; color: #842029; padding: 12px; border-radius: 10px; font-size: 14px;">Erro ao realizar a busca. Tente novamente.</div>';
-      limparFormularioDocumentos();
+      submitStatus.style.background = '#d1e7dd';
+      submitStatus.style.color = '#0f5132';
+      submitStatus.textContent = '✓ Documentos e termos salvos com sucesso!';
+      window.location.replace('../home.html');
+    } catch (error) {
+      console.error('Erro ao salvar documentos:', error);
+      submitStatus.style.background = '#f8d7da';
+      submitStatus.style.color = '#842029';
+      submitStatus.textContent = `Erro ao salvar: ${error.message || 'tente novamente.'}`;
     } finally {
-      btnBuscar.disabled = false;
-      btnBuscar.innerText = "🔍 Buscar Atleta";
+      btnSubmit.disabled = false;
+      btnSubmit.textContent = 'Finalizar e Enviar Cadastro';
     }
-  }
+  });
 
-  if (btnBuscar) {
-    btnBuscar.addEventListener("click", buscarAtleta);
-  }
-
-  // =============================================================
-  // FUNÇÃO DE UPLOAD PARA O SUPABASE STORAGE
-  // =============================================================
-  async function subirArquivoStorage(file, tipo, cpf) {
-    if (!file) return null;
-
-    var ext = file.name.split('.').pop();
-    var nomeArquivo = `${tipo}_${cpf}_${Date.now()}.${ext}`;
-
-    var { data, error } = await supabaseClient.storage
-      .from(BUCKET_NAME)
-      .upload(nomeArquivo, file, { upsert: true });
-
-    if (error) {
-      console.error(`Erro ao subir ${tipo}:`, error.message);
-      throw error;
-    }
-
-    var { data: publicUrlData } = supabaseClient.storage
-      .from(BUCKET_NAME)
-      .getPublicUrl(nomeArquivo);
-
-    return publicUrlData.publicUrl;
-  }
-
-  // =============================================================
-  // 3. ENVIO DO FORMULÁRIO E SALVAMENTO NO BANCO
-  // =============================================================
-  if (form) {
-    form.addEventListener("submit", async function (e) {
-      e.preventDefault();
-
-      if (!atletaEncontradoId) {
-        await buscarAtleta();
-        if (!atletaEncontradoId) {
-          alert("Atenção: É necessário pesquisar um atleta cadastrado via CPF antes de enviar os documentos.");
-          return;
-        }
-      }
-
-      if (btnSubmit) {
-        btnSubmit.disabled = true;
-        btnSubmit.innerText = "Enviando documentos...";
-      }
-
-      if (submitStatus) {
-        submitStatus.style.display = "block";
-        submitStatus.style.background = "#e2e3e5";
-        submitStatus.style.color = "#383d41";
-        submitStatus.innerText = "Enviando arquivos e registrando cadastro...";
-      }
-
-      try {
-        var cpfLimpo = inputCpfConsulta.value.replace(/\D/g, "");
-
-        // Executa o upload apenas se um novo arquivo tiver sido selecionado no input
-        var fileFoto = inputFoto?.files[0];
-        var fileRgCpf = inputDocRgCpf?.files[0];
-        var fileComprovante = inputComprovante?.files[0];
-        var fileSus = inputCartaoSus?.files[0];
-        var fileLaudo = inputLaudoMedico?.files[0];
-
-        var fotoUrlFinal = fileFoto ? await subirArquivoStorage(fileFoto, "foto", cpfLimpo) : urlsExistentes.foto_url;
-        var rgCpfUrlFinal = fileRgCpf ? await subirArquivoStorage(fileRgCpf, "rg_cpf", cpfLimpo) : urlsExistentes.rg_cpf_url;
-        var comprovanteUrlFinal = fileComprovante ? await subirArquivoStorage(fileComprovante, "comprovante", cpfLimpo) : urlsExistentes.comprovante_residencia_url;
-        var susUrlFinal = fileSus ? await subirArquivoStorage(fileSus, "sus", cpfLimpo) : urlsExistentes.cartao_sus_url;
-        var laudoUrlFinal = fileLaudo ? await subirArquivoStorage(fileLaudo, "laudo", cpfLimpo) : urlsExistentes.laudo_medico_url;
-
-        // Monta os dados para a tabela 'documentos_atletas'
-        var dadosDocumentos = {
-          atleta_id: atletaEncontradoId,
-          foto_url: fotoUrlFinal,
-          rg_cpf_url: rgCpfUrlFinal,
-          comprovante_residencia_url: comprovanteUrlFinal,
-          cartao_sus_url: susUrlFinal,
-          laudo_medico_url: laudoUrlFinal,
-          termo_imagem: !!checkTermoImagem?.checked,
-          termo_whatsapp: !!checkTermoWhatsapp?.checked,
-          termo_lgpd: !!checkTermoLgpd?.checked,
-          updated_at: new Date().toISOString()
-        };
-
-        var response = await supabaseClient
-          .from("documentos_atletas")
-          .upsert([dadosDocumentos]);
-
-        if (response.error) throw response.error;
-
-        if (submitStatus) {
-          submitStatus.style.background = "#d1e7dd";
-          submitStatus.style.color = "#0f5132";
-          submitStatus.style.border = "1px solid #badbcc";
-          submitStatus.innerText = "✓ Cadastro e documentos enviados com sucesso!";
-        }
-
-        alert("Documentos e termos enviados com sucesso!");
-
-      } catch (err) {
-        console.error("Erro ao enviar documentos:", err);
-        if (submitStatus) {
-          submitStatus.style.background = "#f8d7da";
-          submitStatus.style.color = "#842029";
-          submitStatus.style.border = "1px solid #f5c2c7";
-          submitStatus.innerText = "Erro ao enviar cadastro: " + (err.message || "Tente novamente.");
-        }
-      } finally {
-        if (btnSubmit) {
-          btnSubmit.disabled = false;
-          btnSubmit.innerText = "Finalizar e Enviar Cadastro";
-        }
-      }
-    });
-  }
-
+  await carregar();
 });

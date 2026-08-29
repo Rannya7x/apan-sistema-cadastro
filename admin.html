@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel Administrativo — APAN</title>
+  <link rel="stylesheet" href="./css/home.css">
+  <link rel="stylesheet" href="./css/session.css">
+</head>
+<body>
+  <main class="portal-card">
+    <div class="session-bar">
+      <div><span class="session-label">Administrador</span><strong id="admin-name">Carregando...</strong></div>
+      <button id="btn-logout" class="logout-button" type="button">Sair</button>
+    </div>
+    <header class="portal-header"><h1>Painel Administrativo</h1><p>Gerencie os dados dos atletas e as informações socioeconômicas.</p></header>
+    <nav class="button-grid">
+      <a href="./html/socioeconomico.html" class="nav-btn primary"><span class="btn-title">Socioeconômico</span><span class="btn-sub">Consultar, preencher e atualizar fichas</span></a>
+      <a href="./html/consulta_inscricao.html" class="nav-btn"><span class="btn-title">Consultar Inscrições</span><span class="btn-sub">Visualizar, editar ou apagar cadastros</span></a>
+    </nav>
+  </main>
+  <script type="module" src="./js/admin.js"></script>
+</body>
+</html>

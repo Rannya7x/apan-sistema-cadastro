@@ -334,3 +334,35 @@ body {
         max-width: 100%;
     }
 }
+/* Perfis de acesso e administração */
+.resumo-atleta { display:flex; flex-wrap:wrap; gap:10px 18px; color:#6c757d; font-size:13px; }
+.admin-actions { display:flex; gap:8px; flex-wrap:wrap; margin-top:14px; }
+.btn-pequeno, .btn-detalhes, .btn-editar, .btn-apagar {
+    border:0; border-radius:8px; padding:9px 13px; font-family:inherit; font-weight:600; cursor:pointer;
+}
+.btn-pequeno { background:#f1f3f5; color:#495057; border:1px solid #dee2e6; }
+.btn-detalhes { background:#e7f3ff; color:#1557b0; }
+.btn-editar { background:#1a73e8; color:#fff; }
+.btn-apagar { background:#fff1f2; color:#b42318; border:1px solid #fecdd3; }
+.detalhe-atleta { margin-top:16px; }
+.perfil-header { display:flex; justify-content:space-between; gap:20px; align-items:flex-start; flex-wrap:wrap; margin-bottom:18px; }
+.perfil-header h2 { color:#1a73e8; font-size:24px; margin-bottom:4px; }
+.documentos-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:10px; margin-top:14px; }
+.doc-item { padding:12px; border-radius:9px; background:#e7f3ff; border:1px solid #c5d5ea; font-size:13px; }
+.doc-item strong, .doc-item span, .doc-item a { display:block; }
+.doc-item a { color:#1a73e8; font-weight:600; margin-top:5px; }
+.doc-item.indisponivel { background:#f8f9fa; color:#8b949e; border-color:#e9ecef; }
+.editor-card { margin-top:22px; padding:20px; background:#f8fafc; border:1px solid #dbe3ec; border-radius:12px; }
+.editor-card h3 { color:#1a73e8; margin-bottom:16px; }
+.editor-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px; }
+.editor-grid label { font-size:13px; font-weight:600; color:#495057; }
+.editor-grid input, .editor-grid select { width:100%; margin-top:5px; padding:10px 12px; border:1px solid #ced4da; border-radius:8px; font-family:inherit; background:#fff; }
+.editor-actions { display:flex; gap:10px; margin-top:18px; flex-wrap:wrap; }
+#status-edicao { margin-top:10px; color:#842029; font-size:13px; }
+.mensagem-info, .mensagem-erro { padding:16px; border-radius:10px; }
+.mensagem-info { background:#f8f9fa; color:#6c757d; }
+.mensagem-erro { background:#fff5f5; border:1px solid #fecaca; color:#991b1b; }
+@media (max-width:600px) {
+    .card-dados .campo { display:block; }
+    .card-dados .campo span { display:block; margin-top:3px; }
+}

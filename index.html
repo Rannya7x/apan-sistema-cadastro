@@ -1,58 +1,25 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal de Inscrições e Serviços — APAN</title>
-    <!-- Vinculando o CSS de navegação -->
-    <link rel="stylesheet" href="./css/home.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Acesso ao Portal — APAN</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./css/auth.css">
 </head>
 <body>
-
-    <main class="portal-card">
-        <header class="portal-header">
-            <h1>Portal APAN Atletismo</h1>
-            <p>Selecione uma das opções abaixo para prosseguir</p>
-        </header>
-
-        <nav class="button-grid">
-            <!-- Botão 1: Link para o formulário existente -->
-            <a href="./html/inscricao.html" class="nav-btn primary">
-                <span class="btn-title">Inscrição Unificada</span>
-                <span class="btn-sub">APAN & Iniciação ao Atletismo</span>
-            </a>
-
-            <!-- Botão 2 -->
-            <a href="./html/socioeconomico.html" class="nav-btn">
-                <span class="btn-title">Socioeconômico</span>
-                <span class="btn-sub">Inscrição das informações do atleta no socioeconômico</span>
-            </a>
-
-            <!-- Botão 3 -->
-            <a href="./html/cadastro_cbat.html" class="nav-btn">
-                <span class="btn-title">Cadastro CBAt</span>
-                <span class="btn-sub">Envie seus documentos</span>
-            </a>
-
-            <!-- Botão 4 -->
-            <a href="./html/consulta_inscricao.html" class="nav-btn">
-                <span class="btn-title">Consultar Inscrição</span>
-                <span class="btn-sub">Acompanhe o status do atleta</span>
-            </a>
-            
-            <a href="./html/saude_autonomia.html" class="nav-btn">
-                <span class="btn-title">Saúde e Autonomia</span>
-                <span class="btn-sub">Informe as necessidades do atleta</span>
-            </a>
-
-            <a href="./html/uniforme.html" class="nav-btn">
-                <span class="btn-title">Uniforme do Atleta</span>
-                <span class="btn-sub">Informe os tamanhos da roupa do atleta</span>
-            </a>
-
-        
-        </nav>
-    </main>
-
+  <main class="auth-shell"><section class="auth-card">
+    <header class="auth-header"><div class="brand-mark">APAN</div><h1>Portal APAN Atletismo</h1><p>Acesse seu cadastro ou entre na área administrativa.</p></header>
+    <div class="auth-tabs" role="tablist"><button type="button" class="auth-tab active" data-auth-tab="painel-atleta">Atleta</button><button type="button" class="auth-tab" data-auth-tab="painel-cadastro">Cadastro</button><button type="button" class="auth-tab" data-auth-tab="painel-admin">Administrador</button></div>
+    <section id="painel-atleta" class="auth-panel active">
+      <form id="form-login-atleta" class="auth-form" autocomplete="off"><div class="field"><label for="login-cpf">CPF</label><input id="login-cpf" data-cpf type="text" inputmode="numeric" maxlength="14" placeholder="000.000.000-00" autocomplete="off" required><small id="login-cpf-status" class="field-feedback" aria-live="polite"></small></div><div class="field"><label for="login-senha">Senha</label><input id="login-senha" type="password" autocomplete="current-password" minlength="8" required></div><button class="primary-button" type="submit">Entrar como atleta</button></form>
+    </section>
+    <section id="painel-cadastro" class="auth-panel"><div class="registration-callout"><h2>Ainda não possui cadastro?</h2><p>Preencha a Inscrição Unificada para criar seu cadastro e sua senha de acesso.</p><a class="primary-button link-button" href="./html/inscricao.html">Realizar cadastro</a></div></section>
+    <section id="painel-admin" class="auth-panel"><form id="form-login-admin" class="auth-form" autocomplete="off"><div class="field"><label for="admin-email">E-mail do administrador</label><input id="admin-email" type="email" autocomplete="off" required><small id="admin-email-status" class="field-feedback" aria-live="polite"></small></div><div class="field"><label for="admin-senha">Senha</label><input id="admin-senha" type="password" autocomplete="current-password" required></div><button class="primary-button" type="submit">Entrar como administrador</button></form></section>
+    <div id="login-status" class="auth-status" aria-live="polite"></div>
+  </section></main>
+  <script type="module" src="./js/login.js"></script>
 </body>
 </html>

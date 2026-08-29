@@ -215,3 +215,11 @@ body {
   color: #8c959f;
   margin-bottom: 6px;
 }
+
+.btn-submit {
+  width: 100%; padding: 13px; background: var(--primary); color: #fff;
+  border: 0; border-radius: 10px; font: 600 15px 'Poppins', sans-serif; cursor: pointer;
+}
+.btn-submit:hover { background: var(--primary-hover); }
+.btn-submit:disabled { opacity: .65; cursor: wait; }
+.status-msg { padding: 12px; border-radius: 10px; }

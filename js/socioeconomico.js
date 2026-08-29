@@ -1,12 +1,11 @@
-// =============================================================
-// CONFIGURAÇÃO DO SUPABASE
-// =============================================================
-const SUPABASE_URL = 'https://jaslvoxljchhhkompelu.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imphc2x2b3hsamNoaGhrb21wZWx1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE3NDY0MDAsImV4cCI6MjA5NzMyMjQwMH0.MoxG26k7LvtGm5hWvoA3YROXh6vJ3LARs9ndjF98hpc';
+import { supabase } from './src/lib/supabase.js';
+import { requireAdmin } from './src/lib/auth.js';
 
-const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const supabaseClient = supabase;
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", async function () {
+  const validacaoAdmin = await requireAdmin('../index.html');
+  if (!validacaoAdmin) return;
   
   // Elementos do DOM
   var checkboxCadUnico = document.getElementById("possuiCadUnico");
@@ -20,6 +19,9 @@ document.addEventListener("DOMContentLoaded", function () {
   var divResultadoBusca = document.getElementById("resultado-busca");
   
   var form = document.getElementById("socio-form");
+  if (form) form.reset();
+  if (inputCpfConsulta) inputCpfConsulta.value = "";
+  if (divResultadoBusca) divResultadoBusca.style.display = "none";
   var submitStatus = document.getElementById("submit-status");
   var btnEnviar = document.getElementById("btn-enviar");
 
@@ -74,6 +76,14 @@ document.addEventListener("DOMContentLoaded", function () {
         limparFormularioSocio();
         divResultadoBusca.style.display = "none";
       }
+    });
+  }
+
+
+  // NIS/PIS/PASEP possui 11 dígitos. Mantém somente números e limita o campo.
+  if (nis) {
+    nis.addEventListener("input", function (e) {
+      e.target.value = e.target.value.replace(/\D/g, "").slice(0, 11);
     });
   }
 
@@ -289,6 +299,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
         var nisBruto = document.getElementById("numeroNis").value;
         var nisLimpo = nisBruto ? nisBruto.replace(/\D/g, "") : null;
+        if (checkboxCadUnico && checkboxCadUnico.checked && (!nisLimpo || nisLimpo.length !== 11)) {
+          throw new Error("O NIS deve conter exatamente 11 números.");
+        }
 
         var dadosSocio = {
           atleta_id: atletaEncontradoId,

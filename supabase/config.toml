@@ -1,0 +1,11 @@
+[functions.register-athlete]
+verify_jwt = false
+
+[functions.activate-athlete]
+verify_jwt = false
+
+[functions.admin-delete-athlete]
+verify_jwt = true
+
+[functions.check-access]
+verify_jwt = false

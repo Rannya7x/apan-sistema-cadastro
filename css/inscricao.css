@@ -60,6 +60,7 @@ input[type="text"],
 input[type="date"],
 input[type="email"],
 input[type="tel"],
+input[type="password"],
 input[type="file"] {
     width: 100%;
     padding: 12px 14px;
@@ -229,3 +230,7 @@ input:focus {
         grid-template-columns: 1fr;
     }
 }
+.field-validation { display:block; min-height:18px; margin-top:5px; font-size:.8rem; color:#6b7280; }
+.field-validation.error { color:#b42318; }
+.field-validation.success { color:#15803d; }
+.field-validation.checking { color:#6b7280; }

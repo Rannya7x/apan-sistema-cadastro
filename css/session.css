@@ -1,0 +1,32 @@
+.session-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e2e8f0;
+  text-align: left;
+}
+.session-bar > div { display: grid; gap: 2px; }
+.session-label { font-size: .76rem; text-transform: uppercase; letter-spacing: .06em; color: #64748b; font-weight: 700; }
+.session-bar strong { color: #1e3a8a; }
+.logout-button {
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  color: #475569;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.logout-button:hover { background: #f8fafc; }
+.athlete-context {
+  margin: 0 0 18px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: #eff6ff;
+  color: #1e40af;
+  border: 1px solid #bfdbfe;
+  font-size: .9rem;
+}

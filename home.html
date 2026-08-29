@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal do Atleta — APAN</title>
+    <link rel="stylesheet" href="./css/home.css">
+    <link rel="stylesheet" href="./css/session.css">
+</head>
+<body>
+    <main class="portal-card">
+        <div class="session-bar">
+            <div>
+                <span class="session-label">Atleta conectado</span>
+                <strong id="athlete-name">Carregando...</strong>
+            </div>
+            <button id="btn-logout" class="logout-button" type="button">Sair</button>
+        </div>
+        <header class="portal-header">
+            <h1>Portal APAN Atletismo</h1>
+            <p>Selecione uma das opções abaixo para consultar ou atualizar seus dados.</p>
+        </header>
+        <nav class="button-grid">
+            <a href="./html/cadastro_cbat.html" class="nav-btn primary"><span class="btn-title">Cadastro CBAt</span><span class="btn-sub">Envie e atualize seus documentos</span></a>
+            <a href="./html/consulta_inscricao.html" class="nav-btn"><span class="btn-title">Minha Inscrição</span><span class="btn-sub">Consulte seus dados cadastrados</span></a>
+            <a href="./html/saude_autonomia.html" class="nav-btn"><span class="btn-title">Saúde e Autonomia</span><span class="btn-sub">Informe ou atualize suas necessidades</span></a>
+            <a href="./html/uniforme.html" class="nav-btn"><span class="btn-title">Uniforme do Atleta</span><span class="btn-sub">Informe ou atualize seus tamanhos</span></a>
+        </nav>
+    </main>
+    <script type="module" src="./js/home.js"></script>
+</body>
+</html>

@@ -9,19 +9,18 @@
 <link rel="stylesheet" href="../css/socioeconomico.css">
 
 <!-- Scripts Supabase -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
 <div class="container">
   
   <!-- Botão de Voltar Padronizado -->
-  <a href="../index.html" class="btn-voltar">
+  <a href="../admin.html" class="btn-voltar">
     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <line x1="19" y1="12" x2="5" y2="12"></line>
       <polyline points="12 19 5 12 12 5"></polyline>
     </svg>
-    Voltar para o Início
+    Voltar ao Painel Administrativo
   </a>
 
   <header class="form-header">
@@ -241,7 +240,7 @@
 
       <div class="field">
         <label for="numeroNis">Número do NIS<span class="req" id="req-nis" hidden> *</span></label>
-        <input type="text" id="numeroNis" name="numeroNis" inputmode="numeric" pattern="\d*" placeholder="Apenas números">
+        <input type="text" id="numeroNis" name="numeroNis" inputmode="numeric" maxlength="11" minlength="11" pattern="[0-9]{11}" placeholder="11 números">
       </div>
 
       <div class="field">
@@ -278,10 +277,7 @@
   </form>
 </div>
 
-<!-- 1. Primeiro importa a biblioteca do Supabase via CDN -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script src="../js/socioeconomico.js"></script>
+<script type="module" src="../js/socioeconomico.js"></script>
 
 </body>
 </html>
