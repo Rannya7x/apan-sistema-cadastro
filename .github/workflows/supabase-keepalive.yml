@@ -1,18 +1,17 @@
-name: Keep Supabase Alive
+name: Keep Alive
 
 on:
+  workflow_dispatch:
   schedule:
-    # Executa a cada 6 dias à meia-noite (UTC)
     - cron: '0 0 */6 * *'
-  workflow_dispatch: # Permite execução manual para testes
 
 jobs:
-  ping-supabase:
+  ping:
     runs-on: ubuntu-latest
     steps:
-      - name: Ping Supabase Database
+      - name: Ping Supabase
         run: |
-          # Faz um GET para a tabela 'keepalive', que é uma consulta real ao banco
-          curl -X GET "${{ secrets.SUPABASE_URL }}/rest/v1/keepalive?select=*&limit=1" \
-          -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
-          -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}"
+          URL=$(echo "${{ secrets.SUPABASE_URL }}" | sed 's:/*$::')
+          curl -sS -f -X GET "$URL/rest/v1/keepalive?select=*&limit=1" \
+            -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}"
